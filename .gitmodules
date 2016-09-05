@@ -1,0 +1,3 @@
+[submodule "superobject"]
+	path = superobject
+	url = https://github.com/hgourvest/superobject.git
