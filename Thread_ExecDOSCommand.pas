@@ -22,6 +22,7 @@ type
     FCommandLine: string;       //待执行的命令行
     FCMDHandle: THandle;        //控制台程序句柄
     FMemo_Log: TMemo;
+    FCorrectQuit: Boolean;      //是否是正常的退出
 
     procedure SetMemo_log(const Value: TMemo);
 
@@ -36,6 +37,7 @@ type
     property MainFormHandle: THandle read FMainFormHandle write FMainFormHandle;
     property CMDHandle: THandle read FCMDHandle;
     property Memo_Log: TMemo read FMemo_Log write SetMemo_log;
+    property CorrectQuit: Boolean read FCorrectQuit write FCorrectQuit;
 
     constructor Create(CommandLine: string; CreateSuspended: Boolean);
     destructor Destroy; override;
@@ -161,6 +163,7 @@ begin
   FLock:= TCriticalSection.Create;
   FCMDLog:= '';
   FMemo_Log:= nil;
+  FCorrectQuit:= False;
   FCommandLine:= CommandLine;
   FThreadState:= 0;
 end;
@@ -174,6 +177,7 @@ end;
 procedure TExecDOSCommand_Thread.Execute;
 begin
   FThreadState:= 1;
+  FCorrectQuit:= False;
   try
     FReadFromPipeStr:= '执行命令：' + FCommandLine + #13 + #10;
     AppendOutputToLog(FReadFromPipeStr);
@@ -183,7 +187,6 @@ begin
         FReadFromPipeStr:= '命令行字符数大于所允许的最大长度，命令中止！' + #13 + #10;
         AppendOutputToLog(FReadFromPipeStr);
         Synchronize(InputToMemo);
-        PostMessage(FMainFormHandle, WM_DOSCOMMANDSTOP, 0, LPARAM(FOwner));
       end
     else
       begin
@@ -203,6 +206,9 @@ begin
     FReadFromPipeStr:= '**************************** end ****************************' + #13 + #10 + #13 + #10;
     AppendOutputToLog(FReadFromPipeStr);
     Synchronize(InputToMemo);
+
+    if (not FCorrectQuit) then
+      PostMessage(FMainFormHandle, WM_DOSCOMMANDSTOP, 0, LPARAM(FOwner));
 
     FThreadState:= 2;
     while not Terminated do

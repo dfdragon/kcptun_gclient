@@ -104,7 +104,7 @@ object FMain: TFMain
       end
       item
         Alignment = taCenter
-        Text = #21442#25968#20381#25454' '#8212#8212' KcpTun '#29256#26412#65306'20160904'
+        Text = #21442#25968#20381#25454' '#8212#8212' KcpTun '#29256#26412#65306'20160906'
         Width = 50
       end>
     OnMouseDown = StatusBar_StatusMouseDown
@@ -1138,11 +1138,11 @@ object FMain: TFMain
       OnClick = Menu_ExitClick
     end
   end
-  object TrayIcon1: TTrayIcon
+  object TrayIcon_Sys: TTrayIcon
     Hint = 'KCPTun '#23458#25143#31471#37197#32622#31649#29702#24037#20855
     PopupMenu = PopupMenu_Tray
     Visible = True
-    OnClick = TrayIcon1Click
+    OnClick = TrayIcon_SysClick
     Left = 48
     Top = 512
   end
@@ -1150,7 +1150,7 @@ object FMain: TFMain
     Left = 209
     Top = 510
     Bitmap = {
-      494C010104001800BC0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800C00010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

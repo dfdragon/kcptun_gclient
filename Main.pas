@@ -94,7 +94,7 @@ type
     Menu_StopAll: TMenuItem;
     N5: TMenuItem;
     Menu_Exit: TMenuItem;
-    TrayIcon1: TTrayIcon;
+    TrayIcon_Sys: TTrayIcon;
     CheckBox_Minimize: TCheckBox;
     CheckBox_AutoExpire: TCheckBox;
     Label_AutoExpire: TLabel;
@@ -165,7 +165,7 @@ type
     procedure Btn_DeleteNodeClick(Sender: TObject);
     procedure Menu_ShowClick(Sender: TObject);
     procedure Menu_ExitClick(Sender: TObject);
-    procedure TrayIcon1Click(Sender: TObject);
+    procedure TrayIcon_SysClick(Sender: TObject);
     procedure Edit_ClientEXEDirChange(Sender: TObject);
     procedure Memo_CMDLineDblClick(Sender: TObject);
     procedure CheckBox_MinimizeClick(Sender: TObject);
@@ -303,7 +303,10 @@ begin
   PublicVar.XMLDocument_Para.SaveToFile;
 
   if ClientNode.isRunCMD <> 0  then
-    ClientNode.StopCommand;
+    begin
+      ClientNode.CorrectQuit:= True;
+      ClientNode.StopCommand;
+    end;
   ClientNode.Free;
   ListView_Node.Selected.Delete;
   ListView_NodeClick(Self);
@@ -367,6 +370,7 @@ begin
       ClientNode:= TClientNode(ListView_Node.Items[i].Data);
       if (ClientNode.isRunCMD = 1) then
         begin
+          ClientNode.CorrectQuit:= True;
           ClientNode.StopCommand;
           ClientNode.RunState:= '0';
         end;
@@ -377,6 +381,7 @@ end;
 
 procedure TFMain.Btn_StopClick(Sender: TObject);
 begin
+  TClientNode(ListView_Node.Selected.Data).CorrectQuit:= True;
   TClientNode(ListView_Node.Selected.Data).StopCommand;
   TClientNode(ListView_Node.Selected.Data).RunState:= '0';
   ListView_Node.Repaint;
@@ -1057,7 +1062,10 @@ begin
     begin
       ClientNode:= TClientNode(ListView_Node.Items.Item[i].Data);
       if (ClientNode.isRunCMD = 1) then
-        ClientNode.StopCommand;
+        begin
+          ClientNode.CorrectQuit:= True;
+          ClientNode.StopCommand;
+        end;
       ClientNode.Free;
     end;
 end;
@@ -1304,7 +1312,7 @@ begin
     end;
 end;
 
-procedure TFMain.TrayIcon1Click(Sender: TObject);
+procedure TFMain.TrayIcon_SysClick(Sender: TObject);
 begin
   FMain.Visible:= not FMain.Visible;
   if FMain.Visible then

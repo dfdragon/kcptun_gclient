@@ -14,6 +14,8 @@ type
     FMemo_Log: TMemo;
     FWholeLog: string;
 
+    FCorrectQuit: Boolean;
+
     FCMDThread: TExecDOSCommand_Thread;
 
     FXMLDocument_Para: TXMLDocument;
@@ -55,6 +57,8 @@ type
     function GetisRunCMD(): Integer;
 
     procedure SetMemo_log(const Value: TMemo);
+
+    procedure SetCorrectQuit(const Value: Boolean);
 
     procedure SetRunState(const Value: string);
     procedure SetRemark(const Value: string);
@@ -123,6 +127,8 @@ type
 
     property Memo_Log: TMemo read FMemo_Log write SetMemo_log;
     property WholeLog: string read FWholeLog write FWholeLog;
+
+    property CorrectQuit: Boolean read FCorrectQuit write SetCorrectQuit;
 
     property XMLDocument_Para: TXMLDocument read FXMLDocument_Para write FXMLDocument_Para;
     property XMLNode: IXMLNode read FXMLNode write FXMLNode;
@@ -275,6 +281,13 @@ begin
   if (FCMDThread <> nil) then
     FCMDThread.Memo_Log:= Value;
   FMemo_Log:= Value;
+end;
+
+procedure TClientNode.SetCorrectQuit(const Value: Boolean);
+begin
+  if (FCMDThread <> nil) then
+    FCMDThread.CorrectQuit:= Value;
+  FCorrectQuit:= Value;
 end;
 
 function TClientNode.GetisRunCMD: Integer;
