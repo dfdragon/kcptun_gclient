@@ -1270,14 +1270,19 @@ end;
 procedure TFMain.Menu_JSONClick(Sender: TObject);
 var
   ClientNode: TClientNode;
+  DefaultJSONFileName: string;
   JSONStr: string;
   JSONFile: TextFile;
   isExcept: Boolean;
   ErrorInfoStr, HintStr: string;
 begin
+  ClientNode:= ListView_Node.Selected.Data;
+  DefaultJSONFileName:= ClientNode.KCPServerIP + '.' + ClientNode.KCPServerPort + '--' + ClientNode.LocalPort;
+  if (ClientNode.Remark.Trim <> '') then
+    DefaultJSONFileName:= ClientNode.Remark.Trim + '(' + DefaultJSONFileName + ')';
+  SaveDialog_JSON.FileName:= DefaultJSONFileName;
   if not SaveDialog_JSON.Execute then
     Exit;
-  ClientNode:= ListView_Node.Selected.Data;
   JSONStr:= ClientNode.CreateJSONConfig();
 
   isExcept:= False;

@@ -2,6 +2,7 @@ program kcptun_gclient;
 
 uses
   Vcl.Forms,
+  System.SysUtils,
   Main in 'Main.pas' {FMain},
   Class_ClientNode in 'Class_ClientNode.pas',
   PublicVar in 'PublicVar.pas',
@@ -28,7 +29,7 @@ begin
   Application.Title := 'KCPTun 客户端配置管理工具';
   VerInfoRes:= TVerInfoRes.Create(Application.ExeName);
   try
-    PublicVar.FileVer:= Copy(VerInfoRes.FileVersion, 1, 5);
+    PublicVar.FileVer:= Copy(VerInfoRes.FileVersion, 1, (LastDelimiter('.', (VerInfoRes.FileVersion)) - 1));
   finally
     VerInfoRes.Free;
   end;       //取EXE文件的版本信息

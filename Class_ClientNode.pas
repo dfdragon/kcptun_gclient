@@ -1008,7 +1008,7 @@ begin
   JSONObject:= TJSONObject.Create;
   try
     if (FLocalPort.Trim <> '') then
-      JSONObject.AddPair(TJSONPair.Create('localaddr', FLocalPort.Trim));
+      JSONObject.AddPair(TJSONPair.Create('localaddr', ':' + FLocalPort.Trim));
     if (FKCPServerIP.Trim <> '') and (FKCPServerPort.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('remoteaddr', (FKCPServerIP.Trim + ':' + FKCPServerPort.Trim)));
 
@@ -1016,7 +1016,12 @@ begin
       JSONObject.AddPair(TJSONPair.Create('key', FKey.Trim));
     if (FisCrypt <> 0) and (FCrypt.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('crypt', FCrypt.Trim));
-    JSONObject.AddPair(TJSONPair.Create('nocomp', LowerCase(BoolToStr(Boolean(FisNoComp), True))));
+
+    if (FisNoComp <> 0) then
+      JSONObject.AddPair(TJSONPair.Create('nocomp', TJSONTrue.Create))
+    else
+      JSONObject.AddPair(TJSONPair.Create('nocomp', TJSONFalse.Create));
+
     if (FisDataShard <> 0) and (FDataShard.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('datashard', TJSONNumber.Create(FDataShard.Trim)));
     if (FisParityShard <> 0) and (FParityShard.Trim <> '') then
@@ -1043,7 +1048,11 @@ begin
       JSONObject.AddPair(TJSONPair.Create('resend', TJSONNumber.Create(FResend.Trim)));
     JSONObject.AddPair(TJSONPair.Create('nc', TJSONNumber.Create(FisNC)));
 
-    JSONObject.AddPair(TJSONPair.Create('acknodelay', LowerCase(BoolToStr(Boolean(FisACKNoDelay), True))));
+    if (FisACKNoDelay <> 0) then
+      JSONObject.AddPair(TJSONPair.Create('acknodelay', TJSONTrue.Create))
+    else
+      JSONObject.AddPair(TJSONPair.Create('acknodelay', TJSONFalse.Create));
+
     if (FisKeepAlive <> 0) and (FKeepAlive.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('keepalive', TJSONNumber.Create(FKeepAlive.Trim)));
     if (FisSockBuf <> 0) and (FSockBuf.Trim <> '') then
