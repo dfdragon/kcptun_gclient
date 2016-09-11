@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Variants, Xml.XMLIntf, Xml.XMLDoc, Winapi.ActiveX,
-  Thread_ExecDOSCommand, Vcl.StdCtrls, Vcl.Forms, System.JSON;
+  Thread_ExecDOSCommand, Vcl.StdCtrls, Vcl.Forms, System.JSON, Winapi.TlHelp32;
 
 type
   TClientNode = class
@@ -217,13 +217,20 @@ type
     function RunCommand(CommandLine: string): Integer;
     function StopCommand(): Integer;
 
+    function SuspendCommand(): Integer;
+    function ResumeCommand(): Integer;
+
     function GetWholeCommandOutput(): string;
   end;
+
+function OpenThread(dwDesiredAccess: DWORD; bInheritHandle: BOOL; dwProcessId: DWORD): THandle; stdcall;
 
 implementation
 
 uses
   superobject;
+
+function OpenThread; external kernel32 name 'OpenThread';
 
 constructor TClientNode.Create;
 var
@@ -1089,6 +1096,66 @@ begin
   FCMDThread.Terminate;
   FCMDThread:= nil;
   Result:= 0;
+end;
+
+function TClientNode.SuspendCommand(): Integer;
+var
+  CMDPID: Cardinal;
+  hSnap: THandle;
+  THR32: THREADENTRY32;
+  hOpen: THandle;
+begin
+  Result:= -1;
+  CMDPID:= GetProcessId(GetHandle());
+  hSnap:= CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+  if hSnap <> INVALID_HANDLE_VALUE then
+    begin
+      THR32.dwSize:= SizeOf(THR32);
+      Thread32First(hSnap, THR32);
+      repeat
+        if THR32.th32OwnerProcessID = CMDPID then
+          begin
+            hOpen:= OpenThread($0002, FALSE, THR32.th32ThreadID);   //THREAD_ALL_ACCESS
+            if hOpen <> INVALID_HANDLE_VALUE then
+              begin
+                Result:= 0;
+                SuspendThread(hOpen);
+                CloseHandle(hOpen);
+              end;
+          end;
+      until Thread32Next(hSnap, THR32) = FALSE;
+      CloseHandle(hSnap);
+    end;
+end;
+
+function TClientNode.ResumeCommand(): Integer;
+var
+  CMDPID: Cardinal;
+  Snapshot, cThr: DWORD;
+  ThrHandle: THandle;
+  Thread: TThreadEntry32;
+begin
+  Result:= -1;
+  CMDPID:= GetProcessId(GetHandle());
+  cThr:= GetCurrentThreadId;
+  Snapshot:= CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
+  if Snapshot <> INVALID_HANDLE_VALUE then
+    begin
+      Thread.dwSize:= SizeOf(TThreadEntry32);
+      if Thread32First(Snapshot, Thread) then
+        repeat
+          if (Thread.th32ThreadID <> cThr) and (Thread.th32OwnerProcessID = CMDPID) then
+            begin
+              ThrHandle:= OpenThread($0002, false, Thread.th32ThreadID);
+              if ThrHandle = 0 then Exit;
+              ResumeThread(ThrHandle);
+              CloseHandle(ThrHandle);
+            end;
+        until not Thread32Next(Snapshot, Thread);
+//      Result:= CloseHandle(Snapshot);
+      if CloseHandle(Snapshot) then
+        Result:= 0;
+    end;
 end;
 
 function TClientNode.GetWholeCommandOutput(): string;
