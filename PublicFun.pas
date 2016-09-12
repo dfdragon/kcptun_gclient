@@ -6,7 +6,7 @@ uses
   Xml.XMLIntf, Xml.XMLDoc, Winapi.Windows, Vcl.Forms, System.Win.Registry;
 
 procedure CreateBlankParaXML(ParaXMLPathName: string);
-procedure RepaireParaXML(ParaXMLPathName: string);
+procedure RepairParaXML(ParaXMLPathName: string);
 procedure WriteREGAutoRun(AutoStart: Integer; FileFullName: string);
 
 implementation
@@ -40,7 +40,7 @@ begin
 end;
 
 //实现-c参数，Node中加入json节点
-procedure RepaireParaXML(ParaXMLPathName: string);
+procedure RepairParaXML(ParaXMLPathName: string);
 var
   isModify: Boolean;
   XMLDocument_BlankPara: TXMLDocument;

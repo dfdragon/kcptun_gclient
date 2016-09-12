@@ -1007,7 +1007,7 @@ begin
   else
     begin
       //参数文件存在，检查参数文件，添加或删除其中的参数项
-      PublicFun.RepaireParaXML(PublicVar.ParaXMLPathName);
+      PublicFun.RepairParaXML(PublicVar.ParaXMLPathName);
     end;
 
   PublicVar.XMLDocument_Para:= TXMLDocument.Create(Application);
