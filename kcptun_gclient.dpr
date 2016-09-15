@@ -1,8 +1,12 @@
 program kcptun_gclient;
 
+{$IFOPT D-}{$WEAKLINKRTTI ON}{$ENDIF}
+{$RTTI EXPLICIT METHODS([]) PROPERTIES([]) FIELDS([])}
+
 uses
   Vcl.Forms,
   System.SysUtils,
+  Winapi.Windows,
   Main in 'Main.pas' {FMain},
   Class_ClientNode in 'Class_ClientNode.pas',
   PublicVar in 'PublicVar.pas',
@@ -19,6 +23,8 @@ uses
   Photo in 'Photo.pas' {FPhoto};
 
 {$R *.res}
+
+{$SetPEFlags IMAGE_FILE_RELOCS_STRIPPED}
 
 var
   VerInfoRes: TVerInfoRes;
