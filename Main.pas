@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.ShellAPI, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  Xml.XMLIntf, Xml.XMLDoc, Vcl.Menus, Vcl.Buttons, Vcl.ImgList, PublicVar;
+  Xml.XMLIntf, Xml.XMLDoc, Vcl.Menus, Vcl.Buttons, Vcl.ImgList, System.JSON, System.IOUtils, PublicVar;
 
 type
   TFMain = class(TForm)
@@ -114,8 +114,9 @@ type
     Label_ConfigFileDir: TLabel;
     Btn_FindConfigFileDir: TButton;
     OpenDialog_JSON: TOpenDialog;
-    Menu_JSON: TMenuItem;
+    Menu_ExportToJSON: TMenuItem;
     SaveDialog_JSON: TSaveDialog;
+    Menu_ImportFromJSON: TMenuItem;
     procedure Btn_AddNodeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Btn_FindClientEXEClick(Sender: TObject);
@@ -190,8 +191,9 @@ type
     procedure Menu_StartClick(Sender: TObject);
     procedure Menu_StopClick(Sender: TObject);
     procedure Menu_DeleteClick(Sender: TObject);
-    procedure Menu_JSONClick(Sender: TObject);
+    procedure Menu_ExportToJSONClick(Sender: TObject);
     procedure Menu_CopyClick(Sender: TObject);
+    procedure Menu_ImportFromJSONClick(Sender: TObject);
   private
     { Private declarations }
     procedure WMSYSCommand(var Msg: TWMSysCommand); message WM_SYSCOMMAND;
@@ -1103,6 +1105,7 @@ begin
 
   CheckBox_ConfigFileDir.Enabled:= True;
   CheckBox_ConfigFileDirClick(Self);
+  ComboBox_ModeChange(Self);
 
   Label_Remark.Enabled:= True;
   Edit_Remark.Enabled:= True;
@@ -1243,6 +1246,7 @@ begin
     NewRemarkStr:= SouClientNode.Remark + ' COPY';
 
   NewClientNode:= TClientNode.Create;
+  NewClientNode.MainFormHandle:= Self.Handle;
   NewClientNode.XMLDocument_Para:= PublicVar.XMLDocument_Para;
   NewClientNode.XMLNode:= NewXMLNode;
   NewClientNode.Remark:= NewRemarkStr;
@@ -1267,7 +1271,7 @@ begin
   Close;
 end;
 
-procedure TFMain.Menu_JSONClick(Sender: TObject);
+procedure TFMain.Menu_ExportToJSONClick(Sender: TObject);
 var
   ClientNode: TClientNode;
   DefaultJSONFileName: string;
@@ -1315,6 +1319,28 @@ begin
       StatusBar_Status.Panels[0].Text:= '导出参数JSON文件成功！';
 //      Application.MessageBox('导出参数JSON文件成功！', '提示', MB_OK);
     end;
+end;
+
+procedure TFMain.Menu_ImportFromJSONClick(Sender: TObject);
+var
+  JSONStr: string;
+  JSONObject: TJSONObject;
+  ClientNode: TClientNode;
+begin
+  if Application.MessageBox('导入操作将完全覆盖现有的配置！确定要导入吗？', '提示', MB_YESNO) = MrNo then
+    Exit;
+  if not OpenDialog_JSON.Execute then
+    Exit;
+  JSONStr:= TFile.ReadAllText(OpenDialog_JSON.FileName);
+  JSONObject:= TJSONObject.ParseJSONValue(JSONStr) as TJSONObject;
+  if JSONObject = nil then
+    begin
+      Application.MessageBox('您所选择的文件不是有效的JSON格式文件，请重新选择！', '提示', MB_OK);
+      Exit;
+    end;
+  ClientNode:= ListView_Node.Selected.Data;
+  ClientNode.ReadFromJSONConfig(JSONStr);
+  ListView_NodeClick(Self);
 end;
 
 procedure TFMain.TrayIcon_SysClick(Sender: TObject);

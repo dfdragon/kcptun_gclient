@@ -54,6 +54,7 @@ type
     FisKeepAlive: Integer;          FKeepAlive: string;
     FisSockBuf: Integer;            FSockBuf: string;
 
+    procedure initPara;
     function GetisRunCMD(): Integer;
 
     procedure SetMemo_log(const Value: TMemo);
@@ -213,6 +214,7 @@ type
     function ModifyXMLNodeValue(Tag: string; TagValue: string): Integer;
     function CreateCMDLine(ClientEXEPathName: string): string;
     function CreateJSONConfig(): string;
+    function ReadFromJSONConfig(JSONStr: string): Integer;
     function GetHandle(): THandle;
     function RunCommand(CommandLine: string): Integer;
     function StopCommand(): Integer;
@@ -232,24 +234,8 @@ uses
 
 function OpenThread; external kernel32 name 'OpenThread';
 
-constructor TClientNode.Create;
-var
-  NodeGUID: TGUID;
+procedure TClientNode.initPara;
 begin
-  inherited;
-
-  FMemo_Log:= nil;
-  FWholeLog:= '';
-
-  FCMDThread:= nil;
-  FXMLNode:= nil;
-  FCanModifyXML:= True;
-
-  CoCreateGuid(NodeGUID);
-  FID:= GUIDToString(NodeGUID);
-  FRunState:= '0';
-  FRemark:= '';
-
   FisJson:= 0;            FJson:= '';
 
   FLocalPort:= '9527';    FKCPServerIP:= '127.0.0.1';   FKCPServerPort:= '29900';
@@ -275,6 +261,27 @@ begin
   FisACKNoDelay:= 0;
   FisKeepAlive:= 0;       FKeepAlive:= '';
   FisSockBuf:= 0;         FSockBuf:= '';
+end;
+
+constructor TClientNode.Create;
+var
+  NodeGUID: TGUID;
+begin
+  inherited;
+
+  FMemo_Log:= nil;
+  FWholeLog:= '';
+
+  FCMDThread:= nil;
+  FXMLNode:= nil;
+  FCanModifyXML:= True;
+
+  CoCreateGuid(NodeGUID);
+  FID:= GUIDToString(NodeGUID);
+  FRunState:= '0';
+  FRemark:= '';
+
+  initPara;
 end;
 
 destructor TClientNode.Destroy;
@@ -1070,6 +1077,129 @@ begin
   finally
     JSONObject.Free;
   end;
+end;
+
+function TClientNode.ReadFromJSONConfig(JSONStr: string): Integer;
+var
+  JSONObject: TJSONObject;
+  StringValue: string;
+  BooleanValue: Boolean;
+  IntegerValue: Integer;
+  ColonPos: Integer;
+begin
+  Result:= 0;
+  initPara;
+
+  JSONObject:= TJSONObject.ParseJSONValue(JSONStr) as TJSONObject;
+  if JSONObject.TryGetValue<string>('localaddr', StringValue) then
+    begin
+      ColonPos:= Pos(':', StringValue);
+      if ColonPos <> 0 then
+        LocalPort:= Trim(Copy(StringValue, (ColonPos + 1), (Length(StringValue) - ColonPos)));
+    end;
+  if JSONObject.TryGetValue<string>('remoteaddr', StringValue) then
+    begin
+      ColonPos:= Pos(':', StringValue);
+      if ColonPos <> 0 then
+        begin
+          KCPServerIP:= Trim(Copy(StringValue, 1, (ColonPos - 1)));
+          KCPServerPort:= Trim(Copy(StringValue, (ColonPos + 1), (Length(StringValue) - ColonPos)));
+        end;
+    end;
+
+  if JSONObject.TryGetValue<string>('key', StringValue) then
+    begin
+      isKey:= 1;
+      Key:= StringValue;
+    end;
+  if JSONObject.TryGetValue<string>('crypt', StringValue) then
+    begin
+      isCrypt:= 1;
+      Crypt:= StringValue.Trim;
+    end;
+  if JSONObject.TryGetValue<Boolean>('nocomp', BooleanValue) then
+    begin
+      isNoComp:= Integer(BooleanValue);
+    end;
+  if JSONObject.TryGetValue<Integer>('datashard', IntegerValue) then
+    begin
+      isDataShard:= 1;
+      DataShard:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('parityshard', IntegerValue) then
+    begin
+      isParityShard:= 1;
+      ParityShard:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('conn', IntegerValue) then
+    begin
+      isConn:= 1;
+      Conn:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('mtu', IntegerValue) then
+    begin
+      isMTU:= 1;
+      MTU:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('sndwnd', IntegerValue) then
+    begin
+      isSndWnd:= 1;
+      SndWnd:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('rcvwnd', IntegerValue) then
+    begin
+      isRcvWnd:= 1;
+      RcvWnd:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('dscp', IntegerValue) then
+    begin
+      isDSCP:= 1;
+      DSCP:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('autoexpire', IntegerValue) then
+    begin
+      isAutoExpire:= 1;
+      AutoExpire:= IntegerValue.ToString;
+    end;
+
+  if JSONObject.TryGetValue<string>('mode', StringValue) then
+    begin
+      isMode:= 1;
+      Mode:= StringValue.Trim;
+    end;
+  if JSONObject.TryGetValue<Integer>('nodelay', IntegerValue) then
+    begin
+      isNoDelay:= IntegerValue;
+    end;
+  if JSONObject.TryGetValue<Integer>('interval', IntegerValue) then
+    begin
+      isInterval:= 1;
+      Interval:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('resend', IntegerValue) then
+    begin
+      isResend:= 1;
+      Resend:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('nc', IntegerValue) then
+    begin
+      isNC:= IntegerValue;
+    end;
+
+  if JSONObject.TryGetValue<Boolean>('acknodelay', BooleanValue) then
+    begin
+      isACKNoDelay:= Integer(BooleanValue);
+    end;
+  if JSONObject.TryGetValue<Integer>('keepalive', IntegerValue) then
+    begin
+      isKeepAlive:= 1;
+      KeepAlive:= IntegerValue.ToString;
+    end;
+  if JSONObject.TryGetValue<Integer>('sockbuf', IntegerValue) then
+    begin
+      isSockBuf:= 1;
+      SockBuf:= IntegerValue.ToString;
+    end;
 end;
 
 function TClientNode.GetHandle(): THandle;
