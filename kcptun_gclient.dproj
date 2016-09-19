@@ -92,6 +92,7 @@
         <DCC_DebugInformation>0</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <Manifest_File>None</Manifest_File>
         <VerInfo_Release>11</VerInfo_Release>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.11.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <Icon_MainIcon>k.ico</Icon_MainIcon>

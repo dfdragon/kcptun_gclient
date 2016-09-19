@@ -987,6 +987,7 @@ begin
   DragAcceptFiles(Handle, True);
   Interface_op.WriteHint_ModeDefault;
   Self.Caption:= Self.Caption + '      程序版本：' + PublicVar.FileVer;
+  TrayIcon_Sys.Hint:= 'KCPTun 客户端配置管理工具 v' + PublicVar.FileVer;
 
   MyMenu_Photo:= GetSystemMenu(Handle, False);
   AppendMenu(MyMenu_Photo, MF_SEPARATOR, 0, nil);
