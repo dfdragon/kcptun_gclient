@@ -47,6 +47,12 @@ begin
 
     PublicVar.ClientEXEDir:= VarToStr(ProgramNode.ChildNodes.FindNode('clientexedir').NodeValue);
     FMain.Edit_ClientEXEDir.Text:= PublicVar.ClientEXEDir;
+
+    PublicVar.AutoConn:= StrToInt(ProgramNode.ChildNodes.FindNode('autoconn').Attributes['enable']);
+    PublicVar.AutoConnTime:= StrToInt(ProgramNode.ChildNodes.FindNode('autoconn').NodeValue);
+    FMain.SpinEdit_AutoConnTime.Value:= PublicVar.AutoConnTime;
+    FMain.CheckBox_AutoConn.Checked:= Boolean(PublicVar.AutoConn);
+    FMain.CheckBox_AutoConnClick(FMain);
   except
     Result:= 1;
   end;

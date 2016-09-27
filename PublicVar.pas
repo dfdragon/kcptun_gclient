@@ -26,6 +26,9 @@ var
   Minimize: Integer;
   ClientEXEDir: string;
 
+  AutoConn: Integer;
+  AutoConnTime: Integer;
+
   CanFoucs: Boolean;
   ModeCanFouse: Boolean;
 

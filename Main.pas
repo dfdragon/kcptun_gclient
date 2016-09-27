@@ -5,7 +5,8 @@ interface
 uses
   Winapi.Windows, Winapi.ShellAPI, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
-  Xml.XMLIntf, Xml.XMLDoc, Vcl.Menus, Vcl.Buttons, Vcl.ImgList, System.JSON, System.IOUtils, PublicVar;
+  Xml.XMLIntf, Xml.XMLDoc, Vcl.Menus, Vcl.Buttons, Vcl.ImgList, System.JSON, System.IOUtils, PublicVar,
+  Vcl.Samples.Spin;
 
 type
   TFMain = class(TForm)
@@ -117,6 +118,9 @@ type
     Menu_ExportToJSON: TMenuItem;
     SaveDialog_JSON: TSaveDialog;
     Menu_ImportFromJSON: TMenuItem;
+    CheckBox_AutoConn: TCheckBox;
+    Label_AutoConnUnit: TLabel;
+    SpinEdit_AutoConnTime: TSpinEdit;
     procedure Btn_AddNodeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Btn_FindClientEXEClick(Sender: TObject);
@@ -194,6 +198,8 @@ type
     procedure Menu_ExportToJSONClick(Sender: TObject);
     procedure Menu_CopyClick(Sender: TObject);
     procedure Menu_ImportFromJSONClick(Sender: TObject);
+    procedure CheckBox_AutoConnClick(Sender: TObject);
+    procedure SpinEdit_AutoConnTimeChange(Sender: TObject);
   private
     { Private declarations }
     procedure WMSYSCommand(var Msg: TWMSysCommand); message WM_SYSCOMMAND;
@@ -398,6 +404,29 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isACKNoDelay:= Integer(CheckBox_ACKNoDelay.Checked);
+end;
+
+procedure TFMain.CheckBox_AutoConnClick(Sender: TObject);
+begin
+  PublicVar.AutoConn:= Integer(CheckBox_AutoConn.Checked);
+
+  SpinEdit_AutoConnTime.Enabled:= CheckBox_AutoConn.Checked;
+  Label_AutoConnUnit.Enabled:= CheckBox_AutoConn.Checked;
+  if CheckBox_AutoConn.Checked then
+    begin
+      SpinEdit_AutoConnTime.Color:= clWindow;
+      if PublicVar.CanFoucs then
+        SpinEdit_AutoConnTime.SetFocus;
+    end
+  else
+    begin
+      SpinEdit_AutoConnTime.Color:= clBtnFace;
+    end;
+
+  if not PublicVar.CanModifyXML then
+    Exit;
+  PublicVar.ProgramNode.ChildNodes['autoconn'].Attributes['enable']:= PublicVar.AutoConn;
+  PublicVar.XMLDocument_Para.SaveToFile;
 end;
 
 procedure TFMain.CheckBox_AutoExpireClick(Sender: TObject);
@@ -1197,6 +1226,15 @@ var
 begin
   CMDLineStr:= TClientNode(ListView_Node.Selected.Data).CreateCMDLine(Edit_ClientEXEDir.Text);
   Memo_CMDLine.Lines.Text:= CMDLineStr;
+end;
+
+procedure TFMain.SpinEdit_AutoConnTimeChange(Sender: TObject);
+begin
+  PublicVar.AutoConnTime:= SpinEdit_AutoConnTime.Value;
+  if not PublicVar.CanModifyXML then
+    Exit;
+  PublicVar.ProgramNode.ChildNodes['autoconn'].NodeValue:= SpinEdit_AutoConnTime.Text;
+  PublicVar.XMLDocument_Para.SaveToFile;
 end;
 
 procedure TFMain.StatusBar_StatusMouseDown(Sender: TObject;

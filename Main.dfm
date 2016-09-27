@@ -25,11 +25,18 @@ object FMain: TFMain
     Height = 12
     Caption = 'KCPTun'#23458#25143#31471'exe'#25991#20214#65306
   end
+  object Label_AutoConnUnit: TLabel
+    Left = 143
+    Top = 572
+    Width = 12
+    Height = 12
+    Caption = #31186
+  end
   object ListView_Node: TListView
     Left = 8
     Top = 8
     Width = 264
-    Height = 545
+    Height = 521
     Columns = <
       item
         Caption = #23458#25143#31471#21015#34920
@@ -52,7 +59,7 @@ object FMain: TFMain
     Width = 75
     Height = 25
     Caption = #28155#21152
-    TabOrder = 3
+    TabOrder = 4
     OnClick = Btn_AddNodeClick
   end
   object Btn_DeleteNode: TButton
@@ -62,7 +69,7 @@ object FMain: TFMain
     Height = 25
     Caption = #21024#38500
     Enabled = False
-    TabOrder = 4
+    TabOrder = 5
     OnClick = Btn_DeleteNodeClick
   end
   object Btn_StartAll: TButton
@@ -71,7 +78,7 @@ object FMain: TFMain
     Width = 75
     Height = 25
     Caption = #20840#37096#21551#21160
-    TabOrder = 5
+    TabOrder = 6
     OnClick = Btn_StartAllClick
   end
   object Btn_StopAll: TButton
@@ -80,7 +87,7 @@ object FMain: TFMain
     Width = 75
     Height = 25
     Caption = #20840#37096#20572#27490
-    TabOrder = 6
+    TabOrder = 7
     OnClick = Btn_StopAllClick
   end
   object StatusBar_Status: TStatusBar
@@ -115,7 +122,7 @@ object FMain: TFMain
     Width = 905
     Height = 633
     BevelInner = bvLowered
-    TabOrder = 9
+    TabOrder = 10
     object Label_Remark: TLabel
       Left = 14
       Top = 313
@@ -1066,7 +1073,7 @@ object FMain: TFMain
   end
   object CheckBox_AutoStart: TCheckBox
     Left = 8
-    Top = 566
+    Top = 542
     Width = 105
     Height = 17
     Caption = ' '#31243#24207#24320#26426#33258#21551
@@ -1080,7 +1087,7 @@ object FMain: TFMain
     Height = 20
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 7
+    TabOrder = 8
     OnChange = Edit_ClientEXEDirChange
   end
   object Btn_FindClientEXE: TButton
@@ -1089,28 +1096,49 @@ object FMain: TFMain
     Width = 75
     Height = 25
     Caption = #27983#35272
-    TabOrder = 8
+    TabOrder = 9
     OnClick = Btn_FindClientEXEClick
   end
   object CheckBox_Minimize: TCheckBox
     Left = 147
-    Top = 566
+    Top = 542
     Width = 125
     Height = 17
     Caption = ' '#31243#24207#21551#21160#21518#26368#23567#21270
     TabOrder = 2
     OnClick = CheckBox_MinimizeClick
   end
+  object CheckBox_AutoConn: TCheckBox
+    Left = 8
+    Top = 570
+    Width = 81
+    Height = 17
+    Caption = ' '#33258#21160#37325#36830
+    TabOrder = 3
+    OnClick = CheckBox_AutoConnClick
+  end
+  object SpinEdit_AutoConnTime: TSpinEdit
+    Left = 89
+    Top = 568
+    Width = 49
+    Height = 21
+    MaxLength = 3
+    MaxValue = 999
+    MinValue = 1
+    TabOrder = 12
+    Value = 0
+    OnChange = SpinEdit_AutoConnTimeChange
+  end
   object OpenDialog_ClientEXE: TOpenDialog
     Filter = 'KCPTun'#23458#25143#31471'|client_windows_*.exe'
     Left = 48
-    Top = 456
+    Top = 344
   end
   object PopupMenu_Tray: TPopupMenu
     AutoHotkeys = maManual
     Images = ImageList_Menu
     Left = 120
-    Top = 512
+    Top = 400
     object Menu_Show: TMenuItem
       Caption = #26174#31034'(&S)'
       ImageIndex = 0
@@ -1144,13 +1172,13 @@ object FMain: TFMain
     Visible = True
     OnClick = TrayIcon_SysClick
     Left = 48
-    Top = 512
+    Top = 400
   end
   object ImageList_Menu: TImageList
     Left = 209
-    Top = 510
+    Top = 398
     Bitmap = {
-      494C010104001800D80010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800EC0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1424,7 +1452,7 @@ object FMain: TFMain
   object PopupMenu_ClientNode: TPopupMenu
     AutoHotkeys = maManual
     Left = 48
-    Top = 384
+    Top = 272
     object Menu_Start: TMenuItem
       Caption = #21551#21160'(&R)'
       OnClick = Menu_StartClick
@@ -1459,13 +1487,13 @@ object FMain: TFMain
   object OpenDialog_JSON: TOpenDialog
     Filter = 'KCPTun'#37197#32622#25991#20214'|*.*'
     Left = 168
-    Top = 456
+    Top = 344
   end
   object SaveDialog_JSON: TSaveDialog
     DefaultExt = 'json'
     Filter = 'JSON'#37197#32622#25991#20214'|*.json'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
     Left = 168
-    Top = 384
+    Top = 272
   end
 end

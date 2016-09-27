@@ -24,6 +24,7 @@ type
     FMemo_Log: TMemo;
     FCorrectQuit: Boolean;      //是否是正常的退出
 
+    procedure MySleep(Timeout: Integer);
     procedure SetMemo_log(const Value: TMemo);
 
     procedure InputToMemo;
@@ -54,6 +55,17 @@ uses
   PublicVar;
 
 { TExecDOSCommand_Thread }
+
+procedure TExecDOSCommand_Thread.MySleep(Timeout: Integer);
+var
+  DeadLine: TDateTime;
+begin
+  DeadLine:= Now + Timeout / 86400000;
+  while (not FCorrectQuit) and (Now <= DeadLine) do
+    begin
+      Application.ProcessMessages;
+    end;
+end;
 
 procedure TExecDOSCommand_Thread.SetMemo_log(const Value: TMemo);
 begin
@@ -179,36 +191,43 @@ begin
   FThreadState:= 1;
   FCorrectQuit:= False;
   try
-    FReadFromPipeStr:= '执行命令：' + FCommandLine + #13 + #10;
-    AppendOutputToLog(FReadFromPipeStr);
-    Synchronize(InputToMemo);
-    if Length(FCommandLine) > MaxCommandLen then
-      begin
-        FReadFromPipeStr:= '命令行字符数大于所允许的最大长度，命令中止！' + #13 + #10;
-        AppendOutputToLog(FReadFromPipeStr);
-        Synchronize(InputToMemo);
-      end
-    else
-      begin
-        FReadFromPipeStr:= '*************************** begin ***************************' + #13 + #10;
-        AppendOutputToLog(FReadFromPipeStr);
-        Synchronize(InputToMemo);
+    repeat
+      FReadFromPipeStr:= '执行命令：' + FCommandLine + #13 + #10;
+      AppendOutputToLog(FReadFromPipeStr);
+      Synchronize(InputToMemo);
+      if Length(FCommandLine) > MaxCommandLen then
+        begin
+          FReadFromPipeStr:= '命令行字符数大于所允许的最大长度，命令中止！' + #13 + #10;
+          AppendOutputToLog(FReadFromPipeStr);
+          Synchronize(InputToMemo);
+        end
+      else
+        begin
+          FReadFromPipeStr:= '*************************** begin ***************************' + #13 + #10;
+          AppendOutputToLog(FReadFromPipeStr);
+          Synchronize(InputToMemo);
 
-        CaptureConsoleOutput(FCommandLine, '',
-          procedure(const Line: PAnsiChar)
-            begin
-              FReadFromPipeStr:= string(Line);
-              AppendOutputToLog(FReadFromPipeStr);
-              Synchronize(InputToMemo);
-            end
-        );
-      end;
-    FReadFromPipeStr:= '**************************** end ****************************' + #13 + #10 + #13 + #10;
-    AppendOutputToLog(FReadFromPipeStr);
-    Synchronize(InputToMemo);
+          CaptureConsoleOutput(FCommandLine, '',
+            procedure(const Line: PAnsiChar)
+              begin
+                FReadFromPipeStr:= string(Line);
+                AppendOutputToLog(FReadFromPipeStr);
+                Synchronize(InputToMemo);
+              end
+          );
+        end;
+      FReadFromPipeStr:= '**************************** end ****************************' + #13 + #10 + #13 + #10;
+      AppendOutputToLog(FReadFromPipeStr);
+      Synchronize(InputToMemo);
 
-    if (not FCorrectQuit) then
-      PostMessage(FMainFormHandle, WM_DOSCOMMANDSTOP, 0, LPARAM(FOwner));
+      if (not FCorrectQuit) then
+        begin
+          if (PublicVar.AutoConn = 0) then
+            PostMessage(FMainFormHandle, WM_DOSCOMMANDSTOP, 0, LPARAM(FOwner))
+          else
+            MySleep(PublicVar.AutoConnTime * 1000);
+        end;
+    until (Terminated or FCorrectQuit or (PublicVar.AutoConn = 0));
 
     FThreadState:= 2;
     while not Terminated do
