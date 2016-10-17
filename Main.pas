@@ -220,7 +220,7 @@ uses
 
 {$R *.dfm}
 {$R photo.RES}
-{$R 'uac.res' 'uac.rc'}
+//{$R 'uac.res' 'uac.rc'}
 
 procedure TFMain.WMSYSCommand;
 begin
