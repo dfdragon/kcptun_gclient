@@ -216,6 +216,7 @@ type
     function CreateJSONConfig(): string;
     function ReadFromJSONConfig(JSONStr: string): Integer;
     function GetHandle(): THandle;
+    function GetPID(): Cardinal;
     function RunCommand(CommandLine: string): Integer;
     function StopCommand(): Integer;
 
@@ -1205,6 +1206,11 @@ end;
 function TClientNode.GetHandle(): THandle;
 begin
   Result:= FCMDThread.CMDHandle;
+end;
+
+function TClientNode.GetPID(): Cardinal;
+begin
+  Result:= FCMDThread.CMDPID;
 end;
 
 function TClientNode.RunCommand(CommandLine: string): Integer;

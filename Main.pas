@@ -1132,6 +1132,15 @@ begin
   Memo_Log.SelStart:= Length(Memo_Log.Lines.Text);
   SendMessage(Memo_Log.Handle, WM_VSCROLL, MAKELONG(SB_BOTTOM, 0), 0);
 
+  if (ClientNode.isRunCMD = 1) then
+    begin
+      StatusBar_Status.Panels[0].Text:= 'PID = ' + ClientNode.GetPID.ToString;
+    end
+  else
+    begin
+      StatusBar_Status.Panels[0].Text:= '';
+    end;
+
   Btn_DeleteNode.Enabled:= True;
 
   CheckBox_ConfigFileDir.Enabled:= True;

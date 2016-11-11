@@ -21,6 +21,7 @@ type
     FReadFromPipeStr: string;   //从控制台管道中读出的字符串
     FCommandLine: string;       //待执行的命令行
     FCMDHandle: THandle;        //控制台程序句柄
+    FCMDPID: Cardinal;          //控制台PID
     FMemo_Log: TMemo;
     FCorrectQuit: Boolean;      //是否是正常的退出
 
@@ -37,6 +38,7 @@ type
     property Owner: TObject read FOwner write FOwner;
     property MainFormHandle: THandle read FMainFormHandle write FMainFormHandle;
     property CMDHandle: THandle read FCMDHandle;
+    property CMDPID: Cardinal read FCMDPID;
     property Memo_Log: TMemo read FMemo_Log write SetMemo_log;
     property CorrectQuit: Boolean read FCorrectQuit write FCorrectQuit;
 
@@ -121,6 +123,7 @@ begin
       if CreateProcess(nil, PChar(ACommand + ' ' + AParameters), @saSecurity, @saSecurity, true, NORMAL_PRIORITY_CLASS, nil, nil, suiStartup, piProcess) then
         try
           FCMDHandle:= piProcess.hProcess;
+          FCMDPID:= piProcess.dwProcessId;
           repeat
             dRunning:= WaitForSingleObject(piProcess.hProcess, 100);
             PeekNamedPipe(hRead, nil, 0, nil, @dAvailable, nil);
@@ -134,6 +137,7 @@ begin
               until (dRead < CReadBuffer);
             Application.ProcessMessages;
           until (dRunning <> WAIT_TIMEOUT);
+          FCMDPID:= 0;
         finally
           CloseHandle(piProcess.hProcess);
           CloseHandle(piProcess.hThread);
