@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.ShellAPI, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.ExtCtrls,
   Xml.XMLIntf, Xml.XMLDoc, Vcl.Menus, Vcl.Buttons, Vcl.ImgList, System.JSON, System.IOUtils, PublicVar,
-  Vcl.Samples.Spin;
+  Vcl.Samples.Spin, System.ImageList;
 
 type
   TFMain = class(TForm)
@@ -219,8 +219,7 @@ uses
   Interface_op, Class_ClientNode, OneCopy, PublicFun, Photo;
 
 {$R *.dfm}
-{$R photo.RES}
-//{$R 'uac.res' 'uac.rc'}
+{$R res\photo.RES}
 
 procedure TFMain.WMSYSCommand;
 begin

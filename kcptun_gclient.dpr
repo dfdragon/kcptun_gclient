@@ -14,13 +14,9 @@ uses
   Thread_ExecDOSCommand in 'Thread_ExecDOSCommand.pas',
   VerInfo in 'VerInfo.pas',
   OneCopy in 'OneCopy.pas',
-  superdate in 'superobject\superdate.pas',
-  superobject in 'superobject\superobject.pas',
-  supertimezone in 'superobject\supertimezone.pas',
-  supertypes in 'superobject\supertypes.pas',
-  superxmlparser in 'superobject\superxmlparser.pas',
   PublicFun in 'PublicFun.pas',
-  Photo in 'Photo.pas' {FPhoto};
+  Photo in 'Photo.pas' {FPhoto},
+  JSONFormatter in 'JSONFormatter.pas';
 
 {$R *.res}
 

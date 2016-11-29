@@ -231,7 +231,7 @@ function OpenThread(dwDesiredAccess: DWORD; bInheritHandle: BOOL; dwProcessId: D
 implementation
 
 uses
-  superobject;
+  JSONFormatter;
 
 function OpenThread; external kernel32 name 'OpenThread';
 
@@ -1018,7 +1018,6 @@ end;
 function TClientNode.CreateJSONConfig(): string;
 var
   JSONObject: TJSONObject;
-  ResultJSON: ISuperObject;
 begin
   JSONObject:= TJSONObject.Create;
   try
@@ -1073,8 +1072,7 @@ begin
     if (FisSockBuf <> 0) and (FSockBuf.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('sockbuf', TJSONNumber.Create(FSockBuf.Trim)));
 
-    ResultJSON:= TSuperObject.ParseString(PWideChar(JSONObject.ToString), True);
-    Result:= ResultJSON.AsJson(True, False);
+    Result:= TJSONFormatter.FormatJSON(JSONObject.ToString);
   finally
     JSONObject.Free;
   end;

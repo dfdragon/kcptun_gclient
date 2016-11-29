@@ -97,7 +97,7 @@ object FMain: TFMain
     Height = 19
     Panels = <
       item
-        Width = 750
+        Width = 700
       end
       item
         Alignment = taCenter
@@ -111,7 +111,7 @@ object FMain: TFMain
       end
       item
         Alignment = taCenter
-        Text = #21442#25968#20381#25454' '#8212#8212' KcpTun '#29256#26412#65306'20160906'
+        Text = ' KcpTun '#23458#25143#31471#35201#27714#65306#20351#29992' 20160906 '#25110#26356#39640#29256#26412
         Width = 50
       end>
     OnMouseDown = StatusBar_StatusMouseDown
@@ -798,7 +798,7 @@ object FMain: TFMain
       object Edit_Interval: TEdit
         Left = 154
         Top = 42
-        Width = 41
+        Width = 59
         Height = 20
         Hint = #40664#35748#20540#65306'40'
         ParentShowHint = False
@@ -1126,7 +1126,7 @@ object FMain: TFMain
     MaxValue = 999
     MinValue = 1
     TabOrder = 12
-    Value = 0
+    Value = 1
     OnChange = SpinEdit_AutoConnTimeChange
   end
   object OpenDialog_ClientEXE: TOpenDialog
@@ -1178,7 +1178,7 @@ object FMain: TFMain
     Left = 209
     Top = 398
     Bitmap = {
-      494C010104001800EC0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800F40010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
