@@ -1397,6 +1397,7 @@ begin
   if FMain.Visible then
     begin
       FMain.WindowState:= wsNormal;
+      SetForegroundWindow(Self.Handle);
     end;
 end;
 
