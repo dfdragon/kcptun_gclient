@@ -121,6 +121,7 @@ type
     CheckBox_AutoConn: TCheckBox;
     Label_AutoConnUnit: TLabel;
     SpinEdit_AutoConnTime: TSpinEdit;
+    CheckBox_AllowOnlyLocal: TCheckBox;
     procedure Btn_AddNodeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Btn_FindClientEXEClick(Sender: TObject);
@@ -200,6 +201,7 @@ type
     procedure Menu_ImportFromJSONClick(Sender: TObject);
     procedure CheckBox_AutoConnClick(Sender: TObject);
     procedure SpinEdit_AutoConnTimeChange(Sender: TObject);
+    procedure CheckBox_AllowOnlyLocalClick(Sender: TObject);
   private
     { Private declarations }
     procedure WMSYSCommand(var Msg: TWMSysCommand); message WM_SYSCOMMAND;
@@ -403,6 +405,16 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isACKNoDelay:= Integer(CheckBox_ACKNoDelay.Checked);
+end;
+
+procedure TFMain.CheckBox_AllowOnlyLocalClick(Sender: TObject);
+var
+  ClientNode: TClientNode;
+begin
+  if ListView_Node.Selected = nil then
+    Exit;
+  ClientNode:= TClientNode(ListView_Node.Selected.Data);
+  ClientNode.AllowOnlyLocal:= Integer(CheckBox_AllowOnlyLocal.Checked);
 end;
 
 procedure TFMain.CheckBox_AutoConnClick(Sender: TObject);
@@ -1377,6 +1389,7 @@ var
 begin
   if Application.MessageBox('导入操作将完全覆盖现有的配置！确定要导入吗？', '提示', MB_YESNO) = MrNo then
     Exit;
+  OpenDialog_JSON.FileName:= '';
   if not OpenDialog_JSON.Execute then
     Exit;
   JSONStr:= TFile.ReadAllText(OpenDialog_JSON.FileName);

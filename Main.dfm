@@ -307,6 +307,15 @@ object FMain: TFMain
         OnChange = Edit_KCPServerPortChange
         OnKeyPress = Edit_LocalPortKeyPress
       end
+      object CheckBox_AllowOnlyLocal: TCheckBox
+        Left = 283
+        Top = 20
+        Width = 142
+        Height = 17
+        Caption = #21482#20801#35768#26469#33258#26412#26426#30340#36830#25509
+        TabOrder = 3
+        OnClick = CheckBox_AllowOnlyLocalClick
+      end
     end
     object GroupBox_SelectPara: TGroupBox
       Left = 11
@@ -1178,7 +1187,7 @@ object FMain: TFMain
     Left = 209
     Top = 398
     Bitmap = {
-      494C010104001800F80010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800FC0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

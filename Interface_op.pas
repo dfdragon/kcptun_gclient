@@ -104,7 +104,7 @@ begin
           Edit_KCPServerIP.Color:= clBtnFace;
           Edit_KCPServerPort.Color:= clBtnFace;
         end;
-      Label_LocalPort.Enabled:= State;            Edit_LocalPort.Enabled:= State;
+      Label_LocalPort.Enabled:= State;            Edit_LocalPort.Enabled:= State;     CheckBox_AllowOnlyLocal.Enabled:= State;
       Label_KCPServerIP.Enabled:= State;          Edit_KCPServerIP.Enabled:= State;
       Label_KCPServerPort.Enabled:= State;        Edit_KCPServerPort.Enabled:= State;
     end;
@@ -214,6 +214,7 @@ begin
   with FMain  do
     begin
       Edit_LocalPort.Text:= ClientNode.LocalPort;
+      CheckBox_AllowOnlyLocal.Checked:= Boolean(ClientNode.AllowOnlyLocal);
       Edit_KCPServerIP.Text:= ClientNode.KCPServerIP;
       Edit_KCPServerPort.Text:= ClientNode.KCPServerPort;
 

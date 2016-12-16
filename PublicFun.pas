@@ -48,7 +48,7 @@ procedure RepairParaXML(ParaXMLPathName: string);
 var
   isModify: Boolean;
   XMLDocument_BlankPara: TXMLDocument;
-  ParasNode, ProgramParaNode, ClientNode, Node, JsonNode, AutoConnNode: IXMLNode;
+  ParasNode, ProgramParaNode, ClientNode, Node, LocalPortNode, JsonNode, AutoConnNode: IXMLNode;
   i: Integer;
 begin
   isModify:= False;
@@ -76,6 +76,16 @@ begin
     for i := 0 to (ClientNode.ChildNodes.Count - 1) do
       begin
         Node:= ClientNode.ChildNodes[i];
+        LocalPortNode:= Node.ChildNodes.FindNode('localport');
+        if LocalPortNode <> nil then
+          begin
+            if (LocalPortNode.AttributeNodes.FindNode('allowonlylocal') = nil) then
+              begin
+                isModify:= True;
+                LocalPortNode.Attributes['allowonlylocal']:= 0;
+              end;
+          end;
+
         JsonNode:= Node.ChildNodes.FindNode('json');
         if JsonNode = nil then
           begin

@@ -29,6 +29,7 @@ type
     FisJson: Integer;               FJson: string;
 
     FLocalPort: string;
+    FAllowOnlyLocal: Integer;
     FKCPServerIP: string;
     FKCPServerPort: string;
 
@@ -68,6 +69,7 @@ type
     procedure SetJson(const Value: string);
 
     procedure SetLocalPort(const Value: string);
+    procedure SetAllowOnlyLocal(const Value: Integer);
     procedure SetKCPServerIP(const Value: string);
     procedure SetKCPServerPort(const Value: string);
 
@@ -145,6 +147,7 @@ type
 
     //基础参数
     property LocalPort: string read FLocalPort write SetLocalPort;
+    property AllowOnlyLocal: Integer read FAllowOnlyLocal write SetAllowOnlyLocal;
     property KCPServerIP: string read FKCPServerIP write SetKCPServerIP;
     property KCPServerPort: string read FKCPServerPort write SetKCPServerPort;
 
@@ -240,6 +243,7 @@ begin
   FisJson:= 0;            FJson:= '';
 
   FLocalPort:= '9527';    FKCPServerIP:= '127.0.0.1';   FKCPServerPort:= '29900';
+  FAllowOnlyLocal:= 0;
 
   FisKey:= 0;             FKey:= '';
   FisCrypt:= 0;           FCrypt:= '';
@@ -360,6 +364,16 @@ begin
       FXMLDocument_Para.SaveToFile;
     end;
   FLocalPort:= Value;
+end;
+
+procedure TClientNode.SetAllowOnlyLocal(const Value: Integer);
+begin
+  if FCanModifyXML then
+    begin
+      FXMLNode.ChildNodes.FindNode('localport').Attributes['allowonlylocal']:= Value;
+      FXMLDocument_Para.SaveToFile;
+    end;
+  FAllowOnlyLocal:= Value;
 end;
 
 procedure TClientNode.SetKCPServerIP(const Value: string);
@@ -737,6 +751,7 @@ begin
     FJson:= VarToStr(DealNode.NodeValue);
 
     FLocalPort:= VarToStr(XMLClientNode.ChildNodes.FindNode('localport').NodeValue).Trim;
+    FAllowOnlyLocal:= StrToInt(VarToStr(XMLClientNode.ChildNodes.FindNode('localport').Attributes['allowonlylocal']).Trim);
     FKCPServerIP:= VarToStr(XMLClientNode.ChildNodes.FindNode('kcpserverip').NodeValue).Trim;
     FKCPServerPort:= VarToStr(XMLClientNode.ChildNodes.FindNode('kcpserverport').NodeValue).Trim;
 
@@ -832,6 +847,7 @@ begin
 
     DealNode:= XMLClientNode.AddChild('localport');
     DealNode.NodeValue:= FLocalPort;
+    DealNode.Attributes['allowonlylocal']:= FAllowOnlyLocal;
     DealNode:= XMLClientNode.AddChild('kcpserverip');
     DealNode.NodeValue:= FKCPServerIP;
     DealNode:= XMLClientNode.AddChild('kcpserverport');
@@ -955,7 +971,12 @@ begin
     end;
 
   //基础参数
-  CMDLine:= CMDLine + ' -l :' + FLocalPort + ' -r ' + FKCPServerIP + ':' + FKCPServerPort;
+  if (FAllowOnlyLocal = 0) then
+    CMDLine:= CMDLine + ' -l :' + FLocalPort
+  else
+    CMDLine:= CMDLine + ' -l 127.0.0.1:' + FLocalPort;
+  CMDLine:= CMDLine + ' -r ' + FKCPServerIP + ':' + FKCPServerPort;
+//  CMDLine:= CMDLine + ' -l :' + FLocalPort + ' -r ' + FKCPServerIP + ':' + FKCPServerPort;
 
   //需要与服务端保持一致
   if (FisKey <> 0) and (FKey.Trim <> '') then
@@ -1022,7 +1043,12 @@ begin
   JSONObject:= TJSONObject.Create;
   try
     if (FLocalPort.Trim <> '') then
-      JSONObject.AddPair(TJSONPair.Create('localaddr', ':' + FLocalPort.Trim));
+      begin
+        if (FAllowOnlyLocal = 0) then
+          JSONObject.AddPair(TJSONPair.Create('localaddr', ':' + FLocalPort.Trim))
+        else
+          JSONObject.AddPair(TJSONPair.Create('localaddr', '127.0.0.1:' + FLocalPort.Trim));
+      end;
     if (FKCPServerIP.Trim <> '') and (FKCPServerPort.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('remoteaddr', (FKCPServerIP.Trim + ':' + FKCPServerPort.Trim)));
 
@@ -1085,6 +1111,7 @@ var
   BooleanValue: Boolean;
   IntegerValue: Integer;
   ColonPos: Integer;
+  LocalIPStr: string;
 begin
   Result:= 0;
   initPara;
@@ -1095,6 +1122,11 @@ begin
       ColonPos:= Pos(':', StringValue);
       if ColonPos <> 0 then
         LocalPort:= Trim(Copy(StringValue, (ColonPos + 1), (Length(StringValue) - ColonPos)));
+
+      AllowOnlyLocal:= 0;
+      LocalIPStr:= LowerCase(Trim(Copy(StringValue, 1, (ColonPos - 1))));
+      if (LocalIPStr = '127.0.0.1') or (LocalIPStr = 'localhost') then
+        AllowOnlyLocal:= 1;
     end;
   if JSONObject.TryGetValue<string>('remoteaddr', StringValue) then
     begin
