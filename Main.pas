@@ -323,18 +323,39 @@ begin
 end;
 
 procedure TFMain.Btn_FindClientEXEClick(Sender: TObject);
+var
+  RelativePath: string;
 begin
   if not OpenDialog_ClientEXE.Execute then
     Exit;
-  PublicVar.ClientEXEDir:= OpenDialog_ClientEXE.FileName;
-  Edit_ClientEXEDir.Text:= OpenDialog_ClientEXE.FileName;
+  RelativePath:= ExtractRelativePath(ExtractFilePath(Application.ExeName), ExtractFilePath(OpenDialog_ClientEXE.FileName));
+  if (RelativePath = '') then
+    begin
+      PublicVar.ClientEXEDir:= ExtractFileName(OpenDialog_ClientEXE.FileName);
+      Edit_ClientEXEDir.Text:= ExtractFileName(OpenDialog_ClientEXE.FileName);
+    end
+  else
+    begin
+      PublicVar.ClientEXEDir:= OpenDialog_ClientEXE.FileName;
+      Edit_ClientEXEDir.Text:= OpenDialog_ClientEXE.FileName;
+    end;
 end;
 
 procedure TFMain.Btn_FindConfigFileDirClick(Sender: TObject);
+var
+  RelativePath: string;
 begin
   if not OpenDialog_JSON.Execute then
     Exit;
-  Edit_ConfigFileDir.Text:= OpenDialog_JSON.FileName;
+  RelativePath:= ExtractRelativePath(ExtractFilePath(Application.ExeName), ExtractFilePath(OpenDialog_JSON.FileName));
+  if (RelativePath = '') then
+    begin
+      Edit_ConfigFileDir.Text:= ExtractFileName(OpenDialog_JSON.FileName);
+    end
+  else
+    begin
+      Edit_ConfigFileDir.Text:= OpenDialog_JSON.FileName;
+    end;
 end;
 
 procedure TFMain.Btn_StartAllClick(Sender: TObject);
