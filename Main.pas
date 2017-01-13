@@ -481,12 +481,15 @@ begin
 end;
 
 procedure TFMain.CheckBox_AutoStartClick(Sender: TObject);
+var
+  AutoStart: Integer;
 begin
   PublicVar.AutoStart:= Integer(CheckBox_AutoStart.Checked);
   if not PublicVar.CanModifyXML then
     Exit;
   try
-    WriteREGAutoRun(PublicVar.AutoStart, Application.ExeName);
+    AutoStart:= Integer(CheckBox_AutoStart.Checked);
+    WriteREGAutoRun(AutoStart, Application.ExeName);
     PublicVar.ProgramNode.ChildNodes['autostart'].NodeValue:= PublicVar.AutoStart;
     PublicVar.XMLDocument_Para.SaveToFile;
   except
@@ -1054,6 +1057,7 @@ begin
   AppendMenu(MyMenu_Photo, MF_SEPARATOR, 0, nil);
   AppendMenu(MyMenu_Photo, MF_STRING, WM_PHOTO, 'º§¿¯ ¶”Ò’’ ^_^');
 
+  CheckBox_AutoStart.Checked:= CheckREGAutoRunExist();
   Interface_op.Enable_DisableAllCheckbox(False);
   Interface_op.DisableAllInterface;
   Label_Remark.Enabled:= False;
@@ -1139,6 +1143,7 @@ procedure TFMain.ListView_NodeClick(Sender: TObject);
 var
   i: Integer;
   ClientNode: TClientNode;
+  CMDPID: Int64;
 begin
   PublicVar.CanFoucs:= False;
   Memo_CMDLine.Clear;
@@ -1166,7 +1171,11 @@ begin
 
   if (ClientNode.isRunCMD = 1) then
     begin
-      StatusBar_Status.Panels[0].Text:= 'PID = ' + ClientNode.GetPID.ToString;
+      CMDPID:= ClientNode.GetPID;
+      if (CMDPID = -1) then
+        StatusBar_Status.Panels[0].Text:= ''
+      else
+        StatusBar_Status.Panels[0].Text:= 'PID = ' + CMDPID.ToString;
     end
   else
     begin

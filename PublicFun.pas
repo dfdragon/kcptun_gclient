@@ -8,6 +8,7 @@ uses
 procedure CreateBlankParaXML(ParaXMLPathName: string);
 procedure RepairParaXML(ParaXMLPathName: string);
 procedure WriteREGAutoRun(AutoStart: Integer; FileFullName: string);
+function CheckREGAutoRunExist(): Boolean;
 
 implementation
 
@@ -118,6 +119,24 @@ begin
         begin
           Reg.WriteString('KCPTun 客户端配置管理工具', FileFullName);
         end;
+    finally
+      Reg.CloseKey;
+    end;//try
+  finally
+    Reg.Free;
+  end;//try
+end;
+
+function CheckREGAutoRunExist(): Boolean;
+var
+  Reg: TRegistry;
+begin
+  Reg:= TRegistry.Create;
+  try
+    Reg.RootKey:= HKEY_LOCAL_MACHINE;
+    Reg.OpenKey('SOFTWARE\Microsoft\Windows\CurrentVersion\Run', True);
+    try
+      Result:= Reg.ValueExists('KCPTun 客户端配置管理工具');
     finally
       Reg.CloseKey;
     end;//try
