@@ -97,7 +97,7 @@ object FMain: TFMain
     Height = 19
     Panels = <
       item
-        Width = 700
+        Width = 680
       end
       item
         Alignment = taCenter
@@ -111,7 +111,7 @@ object FMain: TFMain
       end
       item
         Alignment = taCenter
-        Text = ' KcpTun '#23458#25143#31471#35201#27714#65306#20351#29992' 20160906 '#25110#26356#39640#29256#26412
+        Text = ' KcpTun '#23458#25143#31471#31243#24207#24314#35758#20351#29992' 20170112 '#25110#26356#39640#29256#26412
         Width = 50
       end>
     OnMouseDown = StatusBar_StatusMouseDown
@@ -391,7 +391,7 @@ object FMain: TFMain
         Top = 137
         Width = 108
         Height = 12
-        Hint = #40664#35748#20540#65306'1024'
+        Hint = #40664#35748#20540#65306'512'
         Caption = #25509#25910#31383#21475'(rcvwnd)'#65306
         ParentShowHint = False
         ShowHint = True
@@ -597,7 +597,7 @@ object FMain: TFMain
         Top = 136
         Width = 17
         Height = 17
-        Hint = #40664#35748#20540#65306'1024'
+        Hint = #40664#35748#20540#65306'512'
         ParentShowHint = False
         ShowHint = True
         TabOrder = 15
@@ -608,7 +608,7 @@ object FMain: TFMain
         Top = 133
         Width = 41
         Height = 20
-        Hint = #40664#35748#20540#65306'1024'
+        Hint = #40664#35748#20540#65306'512'
         ParentShowHint = False
         ShowHint = True
         TabOrder = 16
@@ -1187,7 +1187,7 @@ object FMain: TFMain
     Left = 209
     Top = 398
     Bitmap = {
-      494C010104001800040110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800140110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
