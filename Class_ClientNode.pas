@@ -219,7 +219,7 @@ type
     function CreateJSONConfig(): string;
     function ReadFromJSONConfig(JSONStr: string): Integer;
     function GetHandle(): THandle;
-    function GetPID(): Cardinal;
+    function GetPID(): Int64;
     function RunCommand(CommandLine: string): Integer;
     function StopCommand(): Integer;
 
@@ -1238,7 +1238,7 @@ begin
   Result:= FCMDThread.CMDHandle;
 end;
 
-function TClientNode.GetPID(): Cardinal;
+function TClientNode.GetPID(): Int64;
 begin
   Result:= FCMDThread.CMDPID;
 end;
@@ -1254,10 +1254,16 @@ begin
 end;
 
 function TClientNode.StopCommand(): Integer;
+var
+  CMDHandle: THandle;
 begin
-  TerminateProcess(GetHandle(), 0);
-  while FCMDThread.ThreadState <> 2 do
-    Application.ProcessMessages;
+  CMDHandle:= GetHandle();
+  if CMDHandle <> 0 then
+    begin
+      TerminateProcess(GetHandle(), 0);
+      while FCMDThread.ThreadState <> 2 do
+        Application.ProcessMessages;
+    end;
   FWholeLog:= FWholeLog + FCMDThread.GetWholeLog;
   FCMDThread.Terminate;
   FCMDThread:= nil;
