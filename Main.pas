@@ -238,14 +238,14 @@ end;
 
 procedure TFMain.WMDropFiles(var Msg:TMessage);
 var
-  i: Integer;
+  DragFileNum, i: Integer;
   Buffer: array[0..8190] of Char;
-  FileFullName, LowerCaseFileName: string;
+  FileFullName, LowerCaseFileName, RelativePath: string;
   FindFiles: Boolean;
 begin
   FindFiles:= False;
-  i:= DragQueryFile(Msg.wParam, $FFFFFFFF, Buffer, 8190);
-  for i:= 0 to (i - 1) do
+  DragFileNum:= DragQueryFile(Msg.wParam, $FFFFFFFF, Buffer, 8190);
+  for i:= 0 to (DragFileNum - 1) do
     begin    //处理选择多个文件
       DragQueryFile(Msg.wParam, i, Buffer, 8190);
       FileFullName:= Buffer;
@@ -259,8 +259,17 @@ begin
   DragFinish(Msg.wParam);
   if FindFiles then
     begin
-      PublicVar.ClientEXEDir:= FileFullName;
-      Edit_ClientEXEDir.Text:= FileFullName;
+      RelativePath:= ExtractRelativePath(ExtractFilePath(Application.ExeName), ExtractFilePath(FileFullName));
+      if (RelativePath = '') then
+        begin
+          PublicVar.ClientEXEDir:= ExtractFileName(FileFullName);
+          Edit_ClientEXEDir.Text:= ExtractFileName(FileFullName);
+        end
+      else
+        begin
+          PublicVar.ClientEXEDir:= FileFullName;
+          Edit_ClientEXEDir.Text:= FileFullName;
+        end;
     end;
 end;
 
