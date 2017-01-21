@@ -1073,6 +1073,7 @@ begin
   Edit_Remark.Enabled:= False;
   Edit_Remark.Color:= clBtnFace;
 
+  ChDir(ExtractFilePath(Application.ExeName));
   OpenDialog_ClientEXE.InitialDir:= ExtractFilePath(Application.ExeName);
   OpenDialog_JSON.InitialDir:= ExtractFilePath(Application.ExeName);
   SaveDialog_JSON.InitialDir:= ExtractFilePath(Application.ExeName);
