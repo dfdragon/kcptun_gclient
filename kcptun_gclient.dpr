@@ -16,7 +16,8 @@ uses
   OneCopy in 'OneCopy.pas',
   PublicFun in 'PublicFun.pas',
   Photo in 'Photo.pas' {FPhoto},
-  JSONFormatter in 'JSONFormatter.pas';
+  JSONFormatter in 'JSONFormatter.pas',
+  DelphiZXIngQRCode in 'DelphiZXIngQRCode.pas';
 
 {$R *.res}
 

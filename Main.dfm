@@ -36,7 +36,7 @@ object FMain: TFMain
     Left = 8
     Top = 8
     Width = 264
-    Height = 521
+    Height = 257
     Columns = <
       item
         Caption = #23458#25143#31471#21015#34920
@@ -1139,16 +1139,36 @@ object FMain: TFMain
     Value = 1
     OnChange = SpinEdit_AutoConnTimeChange
   end
+  object Panel_QRCode: TPanel
+    Left = 8
+    Top = 271
+    Width = 264
+    Height = 264
+    BevelInner = bvLowered
+    TabOrder = 13
+    object Image_QRCode: TImage
+      Left = 2
+      Top = 2
+      Width = 260
+      Height = 260
+      Align = alClient
+      Stretch = True
+      ExplicitLeft = 104
+      ExplicitTop = 72
+      ExplicitWidth = 105
+      ExplicitHeight = 105
+    end
+  end
   object OpenDialog_ClientEXE: TOpenDialog
     Filter = 'KCPTun'#23458#25143#31471'|client_windows_*.exe'
     Left = 48
-    Top = 344
+    Top = 120
   end
   object PopupMenu_Tray: TPopupMenu
     AutoHotkeys = maManual
     Images = ImageList_Menu
     Left = 120
-    Top = 400
+    Top = 176
     object Menu_Show: TMenuItem
       Caption = #26174#31034'(&S)'
       ImageIndex = 0
@@ -1182,13 +1202,13 @@ object FMain: TFMain
     Visible = True
     OnClick = TrayIcon_SysClick
     Left = 48
-    Top = 400
+    Top = 176
   end
   object ImageList_Menu: TImageList
     Left = 209
-    Top = 398
+    Top = 174
     Bitmap = {
-      494C010104001800240110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800280110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1462,7 +1482,7 @@ object FMain: TFMain
   object PopupMenu_ClientNode: TPopupMenu
     AutoHotkeys = maManual
     Left = 48
-    Top = 272
+    Top = 48
     object Menu_Start: TMenuItem
       Caption = #21551#21160'(&R)'
       OnClick = Menu_StartClick
@@ -1497,13 +1517,13 @@ object FMain: TFMain
   object OpenDialog_JSON: TOpenDialog
     Filter = 'KCPTun'#37197#32622#25991#20214'|*.*'
     Left = 168
-    Top = 344
+    Top = 120
   end
   object SaveDialog_JSON: TSaveDialog
     DefaultExt = 'json'
     Filter = 'JSON'#37197#32622#25991#20214'|*.json'
     Options = [ofOverwritePrompt, ofHideReadOnly, ofEnableSizing]
     Left = 168
-    Top = 272
+    Top = 48
   end
 end

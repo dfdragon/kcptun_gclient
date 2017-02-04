@@ -122,6 +122,8 @@ type
     Label_AutoConnUnit: TLabel;
     SpinEdit_AutoConnTime: TSpinEdit;
     CheckBox_AllowOnlyLocal: TCheckBox;
+    Panel_QRCode: TPanel;
+    Image_QRCode: TImage;
     procedure Btn_AddNodeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Btn_FindClientEXEClick(Sender: TObject);
@@ -205,6 +207,7 @@ type
   private
     { Private declarations }
     procedure WMSYSCommand(var Msg: TWMSysCommand); message WM_SYSCOMMAND;
+    function CreateQRCodeBitmap(QRData: string): TMemoryStream;
   protected
     procedure WMDropFiles(var Msg: TMessage); message WM_DROPFILES;
     procedure WMDOSCommandStop(var Msg: TMessage); message WM_DOSCOMMANDSTOP;
@@ -218,10 +221,49 @@ var
 implementation
 
 uses
-  Interface_op, Class_ClientNode, OneCopy, PublicFun, Photo;
+  Interface_op, Class_ClientNode, OneCopy, PublicFun, Photo, DelphiZXIngQRCode;
 
 {$R *.dfm}
 {$R res\photo.RES}
+
+function TFMain.CreateQRCodeBitmap(QRData: string): TMemoryStream;
+var
+  QRCode: TDelphiZXingQRCode;
+  QRCodeBitmap: TBitmap;
+  Row, Column: Integer;
+begin
+  Result:= TMemoryStream.Create;
+  QRCode:= TDelphiZXingQRCode.Create;
+  try
+    QRCode.Data:= QRData;
+    QRCode.Encoding:= qrISO88591;
+    QRCode.QuietZone:= 2;
+    QRCodeBitmap:= TBitmap.Create;
+    try
+      QRCodeBitmap.SetSize(QRCode.Rows, QRCode.Columns);
+      for Row := 0 to QRCode.Rows - 1 do
+        begin
+          for Column := 0 to QRCode.Columns - 1 do
+            begin
+              if (QRCode.IsBlack[Row, Column]) then
+                begin
+                  QRCodeBitmap.Canvas.Pixels[Column, Row]:= clBlack;
+                end
+              else
+                begin
+                  QRCodeBitmap.Canvas.Pixels[Column, Row]:= clWhite;
+                end;
+            end;
+        end;
+      QRCodeBitmap.SaveToStream(Result);
+      Result.Position:= 0;
+    finally
+      QRCodeBitmap.Free;
+    end;
+  finally
+    QRCode.Free;
+  end;
+end;
 
 procedure TFMain.WMSYSCommand;
 begin
@@ -1154,6 +1196,8 @@ var
   i: Integer;
   ClientNode: TClientNode;
   CMDPID: Int64;
+  QRCodeStream: TMemoryStream;
+//  NewImage: TImage;
 begin
   PublicVar.CanFoucs:= False;
   Memo_CMDLine.Clear;
@@ -1168,6 +1212,7 @@ begin
   if (ListView_Node.Selected = nil) then
     begin
       Interface_op.DisableAllInterface;
+      Image_QRCode.Picture:= nil;
       Exit;
     end;
   ClientNode:= ListView_Node.Selected.Data;
@@ -1207,6 +1252,26 @@ begin
 
   ClientNode.CanModifyXML:= True;
   PublicVar.CanFoucs:= True;
+
+  QRCodeStream:= CreateQRCodeBitmap('test');
+  try
+    Image_QRCode.Picture.Bitmap.LoadFromStream(QRCodeStream);
+  finally
+    QRCodeStream.Free;
+  end;
+
+  //save QRCode to bmp file
+//  NewImage:= TImage.Create(Self);
+//  try
+//    NewImage.Width:= Image_QRCode.Width;
+//    NewImage.Height:= Image_QRCode.Height;
+//    StretchBlt(NewIMage.Canvas.Handle, 0, 0, NewImage.Width, NewImage.Height,
+//      Image_QRCode.Canvas.Handle, 0, 0, Image_QRCode.Picture.Width, Image_QRCode.Picture.Height,
+//      SRCCOPY);
+//    NewImage.Picture.SaveToFile('test.bmp');
+//  finally
+//    NewImage.Free;
+//  end;
 end;
 
 procedure TFMain.ListView_NodeCustomDrawItem(Sender: TCustomListView;
