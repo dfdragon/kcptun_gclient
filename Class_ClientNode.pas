@@ -4,7 +4,8 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Variants, Xml.XMLIntf, Xml.XMLDoc, Winapi.ActiveX,
-  Thread_ExecDOSCommand, Vcl.StdCtrls, Vcl.Forms, System.JSON, Winapi.TlHelp32;
+  Thread_ExecDOSCommand, Vcl.StdCtrls, Vcl.Forms, System.JSON, Winapi.TlHelp32, Soap.EncdDecd,
+  System.NetEncoding;
 
 type
   TClientNode = class
@@ -218,6 +219,7 @@ type
     function CreateCMDLine(ClientEXEPathName: string): string;
     function CreateJSONConfig(): string;
     function ReadFromJSONConfig(JSONStr: string): Integer;
+    function CreateQRCodeData(): string;
     function GetHandle(): THandle;
     function GetPID(): Int64;
     function RunCommand(CommandLine: string): Integer;
@@ -1231,6 +1233,64 @@ begin
       isSockBuf:= 1;
       SockBuf:= IntegerValue.ToString;
     end;
+end;
+
+function TClientNode.CreateQRCodeData(): string;
+var
+  QRData: string;
+  ValueStr: string;
+begin
+  QRData:= FKCPServerIP.Trim + ':' + FKCPServerPort.Trim + ';';
+
+  ValueStr:= '';
+  if FisKey <> 0 then ValueStr:= EncodeString(FKey.Trim);
+  QRData:= QRData + 'key=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisCrypt <> 0 then ValueStr:= FCrypt.Trim;
+  QRData:= QRData + 'crypt=' + ValueStr + ';';
+
+  if FisNoComp <> 0 then   QRData:= QRData + 'nocomp;';
+
+  ValueStr:= '';
+  if FisDataShard <> 0 then ValueStr:= FDataShard.Trim;
+  QRData:= QRData + 'datashard=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisParityShard <> 0 then ValueStr:= FParityShard.Trim;
+  QRData:= QRData + 'parityshard=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisConn <> 0 then ValueStr:= FConn.Trim;
+  QRData:= QRData + 'conn=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisMTU <> 0 then ValueStr:= FMTU.Trim;
+  QRData:= QRData + 'mtu=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisSndWnd <> 0 then ValueStr:= FSndWnd.Trim;
+  QRData:= QRData + 'sndwnd=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisRcvWnd <> 0 then ValueStr:= FRcvWnd.Trim;
+  QRData:= QRData + 'rcvwnd=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisDSCP <> 0 then ValueStr:= FDSCP.Trim;
+  QRData:= QRData + 'dscp=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisAutoExpire <> 0 then ValueStr:= FAutoExpire.Trim;
+  QRData:= QRData + 'autoexpire=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisMode <> 0 then ValueStr:= FMode.Trim;
+  QRData:= QRData + 'mode=' + ValueStr + ';';
+
+  QRData:= QRData + 'remark=' + EncodeString(FRemark.Trim) + ';';
+
+  Result:= 'kcptun://' + EncodeString(QRData);
 end;
 
 function TClientNode.GetHandle(): THandle;
