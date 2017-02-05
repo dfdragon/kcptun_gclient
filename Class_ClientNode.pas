@@ -1240,7 +1240,7 @@ var
   QRData: string;
   ValueStr: string;
 begin
-  QRData:= FKCPServerIP.Trim + ':' + FKCPServerPort.Trim + ';';
+  QRData:= 'server=' + FKCPServerIP.Trim + ':' + FKCPServerPort.Trim + ';';
 
   ValueStr:= '';
   if FisKey <> 0 then ValueStr:= EncodeString(FKey.Trim);
@@ -1250,7 +1250,10 @@ begin
   if FisCrypt <> 0 then ValueStr:= FCrypt.Trim;
   QRData:= QRData + 'crypt=' + ValueStr + ';';
 
-  if FisNoComp <> 0 then   QRData:= QRData + 'nocomp;';
+//  if FisNoComp <> 0 then   QRData:= QRData + 'nocomp;';
+  ValueStr:= '0';
+  if (FisNoComp <> 0) then ValueStr:= '1';
+  QRData:= QRData + 'nocomp=' + ValueStr + ';';
 
   ValueStr:= '';
   if FisDataShard <> 0 then ValueStr:= FDataShard.Trim;
@@ -1288,9 +1291,42 @@ begin
   if FisMode <> 0 then ValueStr:= FMode.Trim;
   QRData:= QRData + 'mode=' + ValueStr + ';';
 
+  if (FisMode <> 0) and (FMode = 'manual') then
+    begin
+      ValueStr:= '0';
+      if (FisNoDelay <> 0) then ValueStr:= '1';
+      QRData:= QRData + 'nodelay=' + ValueStr + ';';
+
+      ValueStr:= '';
+      if (FisInterval <> 0) then ValueStr:= FInterval.Trim;
+      QRData:= QRData + 'interval=' + ValueStr + ';';
+
+      ValueStr:= '';
+      if (FisResend <> 0) then ValueStr:= FResend.Trim;
+      QRData:= QRData + 'resend=' + ValueStr + ';';
+
+      ValueStr:= '0';
+      if (FisNC <> 0) then ValueStr:= '1';
+      QRData:= QRData + 'nc=' + ValueStr + ';';
+    end;
+
+////  if FisACKNoDelay <> 0 then   QRData:= QRData + 'acknodelay;';
+//  ValueStr:= '0';
+//  if (FisACKNoDelay <> 0) then ValueStr:= '1';
+//  QRData:= QRData + 'acknodelay=' + ValueStr + ';';
+//
+//  ValueStr:= '';
+//  if FisKeepAlive <> 0 then ValueStr:= FKeepAlive.Trim;
+//  QRData:= QRData + 'keepalive=' + ValueStr + ';';
+//
+//  ValueStr:= '';
+//  if FisSockBuf <> 0 then ValueStr:= FSockBuf.Trim;
+//  QRData:= QRData + 'sockbuf=' + ValueStr + ';';
+
   QRData:= QRData + 'remark=' + EncodeString(FRemark.Trim) + ';';
 
   Result:= 'kcptun://' + EncodeString(QRData);
+//  Result:= 'kcptun://' + QRData;
 end;
 
 function TClientNode.GetHandle(): THandle;
