@@ -7,3 +7,19 @@ GUI for KCPTun windows client
 
 说明：点击“程序开机自启”，会在HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run下写入启动项“KCPTun 客户端配置管理工具”，由于程序没有请求UAC，所以在win7或win10下需要以系统管理员身份运行(
 只是写入注册表需要系统管理员权限，平常情况下并不需要管理员权限)。
+
+有关二维码的说明：
+
+kcptun://datas      
+
+datas使用base64编码，采用“键=值”格式，各项之间用;分隔，格式如下：
+
+server=[];key=[];crypt=[];nocomp=true|false;datashard=[];parityshard=[];conn=[];mtu=[];sndwnd=[];rcvwnd=[];dscp=[];autoexpire=[];mode=[];[nodelay=[];interval=[];resend=[];nc=[];]acknodelay=true|false;keepalive=[];sockbuf=[];remark=[];
+
+server值 —— ip:port
+
+key值 —— base64编码
+
+remark值 —— base64编码
+
+当mode值为manual时，会带有nodelay、interval、resend和nc四项
