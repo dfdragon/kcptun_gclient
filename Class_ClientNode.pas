@@ -1246,7 +1246,7 @@ begin
       Exit;
     end;
 
-  QRData:= 'server=' + FKCPServerIP.Trim + ':' + FKCPServerPort.Trim + ';';
+  QRData:= 'r=' + FKCPServerIP.Trim + ':' + FKCPServerPort.Trim + ';';
 
   ValueStr:= '';
   if FisKey <> 0 then ValueStr:= EncodeString(FKey.Trim);
