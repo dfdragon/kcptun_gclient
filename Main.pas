@@ -234,6 +234,12 @@ var
   QRCodeBitmap: TBitmap;
   Row, Column: Integer;
 begin
+  if (QRData = '') then
+    begin
+      Result:= nil;
+      Exit;
+    end;
+
   Result:= TMemoryStream.Create;
   QRCode:= TDelphiZXingQRCode.Create;
   try
@@ -273,7 +279,10 @@ var
 begin
   QRCodeStream:= CreateQRCodeBitmap(ClientNode.CreateQRCodeData);
   try
-    Image_QRCode.Picture.Bitmap.LoadFromStream(QRCodeStream);
+    if QRCodeStream = nil then
+      Image_QRCode.Picture:= nil
+    else
+      Image_QRCode.Picture.Bitmap.LoadFromStream(QRCodeStream);
   finally
     QRCodeStream.Free;
   end;
@@ -491,6 +500,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isACKNoDelay:= Integer(CheckBox_ACKNoDelay.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.CheckBox_AllowOnlyLocalClick(Sender: TObject);
@@ -594,6 +606,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isJson:= Integer(CheckBox_ConfigFileDir.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.CheckBox_ConnClick(Sender: TObject);
@@ -698,6 +713,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isInterval:= Integer(CheckBox_Interval.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.CheckBox_KeepAliveClick(Sender: TObject);
@@ -717,6 +735,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isKeepAlive:= Integer(CheckBox_KeepAlive.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.CheckBox_KeyClick(Sender: TObject);
@@ -812,6 +833,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isNC:= Integer(CheckBox_NC.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.CheckBox_NoCompClick(Sender: TObject);
@@ -838,6 +862,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isNoDelay:= Integer(CheckBox_NoDelay.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.CheckBox_ParityShardClick(Sender: TObject);
@@ -903,6 +930,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isResend:= Integer(CheckBox_Resend.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.CheckBox_SndWndClick(Sender: TObject);
@@ -944,6 +974,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isSockBuf:= Integer(CheckBox_SockBuf.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.ComboBox_CryptChange(Sender: TObject);
@@ -1034,6 +1067,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).Interval:= Edit_Interval.Text;
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.Edit_KCPServerIPChange(Sender: TObject);
@@ -1077,6 +1113,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).KeepAlive:= Edit_KeepAlive.Text;
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.Edit_KeyChange(Sender: TObject);
@@ -1163,6 +1202,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).Resend:= Edit_Resend.Text;
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.Edit_SndWndChange(Sender: TObject);
@@ -1180,6 +1222,9 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).SockBuf:= Edit_SockBuf.Text;
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
 procedure TFMain.FormCreate(Sender: TObject);

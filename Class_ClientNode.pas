@@ -965,7 +965,8 @@ var
 begin
   CMDLine:= AnsiQuotedStr(ClientEXEPathName, Char('"'));
 
-  if (FisJson <> 0) and (FJson.Trim <> '') then
+//  if (FisJson <> 0) and (FJson.Trim <> '') then
+  if (FisJson <> 0) then
     begin
       CMDLine:= CMDLine + ' -c ' + AnsiQuotedStr(FJson.Trim, Char('"'));;
       Result:= Trim(CMDLine);
@@ -978,7 +979,6 @@ begin
   else
     CMDLine:= CMDLine + ' -l 127.0.0.1:' + FLocalPort;
   CMDLine:= CMDLine + ' -r ' + FKCPServerIP + ':' + FKCPServerPort;
-//  CMDLine:= CMDLine + ' -l :' + FLocalPort + ' -r ' + FKCPServerIP + ':' + FKCPServerPort;
 
   //需要与服务端保持一致
   if (FisKey <> 0) and (FKey.Trim <> '') then
@@ -1240,6 +1240,12 @@ var
   QRData: string;
   ValueStr: string;
 begin
+  if (FisJson <> 0) then
+    begin
+      Result:= '';
+      Exit;
+    end;
+
   QRData:= 'server=' + FKCPServerIP.Trim + ':' + FKCPServerPort.Trim + ';';
 
   ValueStr:= '';
@@ -1250,10 +1256,7 @@ begin
   if FisCrypt <> 0 then ValueStr:= FCrypt.Trim;
   QRData:= QRData + 'crypt=' + ValueStr + ';';
 
-//  if FisNoComp <> 0 then   QRData:= QRData + 'nocomp;';
-  ValueStr:= '0';
-  if (FisNoComp <> 0) then ValueStr:= '1';
-  QRData:= QRData + 'nocomp=' + ValueStr + ';';
+  QRData:= QRData + 'nocomp=' + LowerCase(BoolToStr(Boolean(FisNoComp), True)) + ';';
 
   ValueStr:= '';
   if FisDataShard <> 0 then ValueStr:= FDataShard.Trim;
@@ -1310,18 +1313,15 @@ begin
       QRData:= QRData + 'nc=' + ValueStr + ';';
     end;
 
-////  if FisACKNoDelay <> 0 then   QRData:= QRData + 'acknodelay;';
-//  ValueStr:= '0';
-//  if (FisACKNoDelay <> 0) then ValueStr:= '1';
-//  QRData:= QRData + 'acknodelay=' + ValueStr + ';';
-//
-//  ValueStr:= '';
-//  if FisKeepAlive <> 0 then ValueStr:= FKeepAlive.Trim;
-//  QRData:= QRData + 'keepalive=' + ValueStr + ';';
-//
-//  ValueStr:= '';
-//  if FisSockBuf <> 0 then ValueStr:= FSockBuf.Trim;
-//  QRData:= QRData + 'sockbuf=' + ValueStr + ';';
+  QRData:= QRData + 'acknodelay=' + LowerCase(BoolToStr(Boolean(FisACKNoDelay), True)) + ';';
+
+  ValueStr:= '';
+  if FisKeepAlive <> 0 then ValueStr:= FKeepAlive.Trim;
+  QRData:= QRData + 'keepalive=' + ValueStr + ';';
+
+  ValueStr:= '';
+  if FisSockBuf <> 0 then ValueStr:= FSockBuf.Trim;
+  QRData:= QRData + 'sockbuf=' + ValueStr + ';';
 
   QRData:= QRData + 'remark=' + EncodeString(FRemark.Trim) + ';';
 
