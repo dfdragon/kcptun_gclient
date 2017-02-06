@@ -14,9 +14,9 @@ kcptun://datas
 
 datas使用base64编码，采用“键=值”格式，各项之间用;分隔，格式如下：
 
-server=[];key=[];crypt=[];nocomp=true|false;datashard=[];parityshard=[];conn=[];mtu=[];sndwnd=[];rcvwnd=[];dscp=[];autoexpire=[];mode=[];[nodelay=[];interval=[];resend=[];nc=[];]acknodelay=true|false;keepalive=[];sockbuf=[];remark=[];
+r=[];key=[];crypt=[];nocomp=true|false;datashard=[];parityshard=[];conn=[];mtu=[];sndwnd=[];rcvwnd=[];dscp=[];autoexpire=[];mode=[];[nodelay=[];interval=[];resend=[];nc=[];]acknodelay=true|false;keepalive=[];sockbuf=[];remark=[];
 
-server值 —— ip:port
+r值 —— ip:port
 
 key值 —— base64编码
 
