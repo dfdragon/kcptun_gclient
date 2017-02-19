@@ -124,6 +124,9 @@ type
     CheckBox_AllowOnlyLocal: TCheckBox;
     Panel_QRCode: TPanel;
     Image_QRCode: TImage;
+    CheckBox_ScavengeTTL: TCheckBox;
+    Label_ScavengeTTL: TLabel;
+    Edit_ScavengeTTL: TEdit;
     procedure Btn_AddNodeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Btn_FindClientEXEClick(Sender: TObject);
@@ -204,6 +207,9 @@ type
     procedure CheckBox_AutoConnClick(Sender: TObject);
     procedure SpinEdit_AutoConnTimeChange(Sender: TObject);
     procedure CheckBox_AllowOnlyLocalClick(Sender: TObject);
+    procedure Edit_ScavengeTTLKeyPress(Sender: TObject; var Key: Char);
+    procedure CheckBox_ScavengeTTLClick(Sender: TObject);
+    procedure Edit_ScavengeTTLChange(Sender: TObject);
   private
     { Private declarations }
     function CreateQRCodeBitmap(QRData: string): TMemoryStream;
@@ -935,6 +941,28 @@ begin
     LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
 end;
 
+procedure TFMain.CheckBox_ScavengeTTLClick(Sender: TObject);
+begin
+  Label_ScavengeTTL.Enabled:= CheckBox_ScavengeTTL.Checked;
+  Edit_ScavengeTTL.Enabled:= CheckBox_ScavengeTTL.Checked;
+  if CheckBox_ScavengeTTL.Checked then
+    begin
+      Edit_ScavengeTTL.Color:= clWindow;
+      if PublicVar.CanFoucs then
+        Edit_ScavengeTTL.SetFocus;
+    end
+  else
+    begin
+      Edit_ScavengeTTL.Color:= clBtnFace;
+    end;
+  if ListView_Node.Selected = nil then
+    Exit;
+  TClientNode(ListView_Node.Selected.Data).isScavengeTTL:= Integer(CheckBox_ScavengeTTL.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
+end;
+
 procedure TFMain.CheckBox_SndWndClick(Sender: TObject);
 begin
   Label_SndWnd.Enabled:= CheckBox_SndWnd.Checked;
@@ -1205,6 +1233,22 @@ begin
 
   if PublicVar.CanModifyXML then
     LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
+end;
+
+procedure TFMain.Edit_ScavengeTTLChange(Sender: TObject);
+begin
+  if ListView_Node.Selected = nil then
+    Exit;
+  TClientNode(ListView_Node.Selected.Data).ScavengeTTL:= Edit_ScavengeTTL.Text;
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
+end;
+
+procedure TFMain.Edit_ScavengeTTLKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not CharInSet(Key, ['0'..'9', '-', #8]) then
+    Key:= #0;
 end;
 
 procedure TFMain.Edit_SndWndChange(Sender: TObject);

@@ -74,6 +74,7 @@ begin
       CheckBox_RcvWnd.Enabled:= State;
       CheckBox_DSCP.Enabled:= State;
       CheckBox_AutoExpire.Enabled:= State;
+      CheckBox_ScavengeTTL.Enabled:= State;
 
       CheckBox_Mode.Enabled:= State;
       CheckBox_NoDelay.Enabled:= State;
@@ -126,6 +127,7 @@ begin
       CheckBox_RcvWnd.Enabled:= State;        CheckBox_RcvWndClick(FMain);
       CheckBox_DSCP.Enabled:= State;          CheckBox_DSCPClick(FMain);
       CheckBox_AutoExpire.Enabled:= State;    CheckBox_AutoExpireClick(FMain);
+      CheckBox_ScavengeTTL.Enabled:= State;   CheckBox_ScavengeTTLClick(FMain);
     end;
 end;
 
@@ -167,6 +169,7 @@ begin
       Label_RcvWnd.Enabled:= False;       Edit_RcvWnd.Enabled:= False;      Edit_RcvWnd.Color:= clBtnFace;
       Label_DSCP.Enabled:= False;         Edit_DSCP.Enabled:= False;        Edit_DSCP.Color:= clBtnFace;
       Label_AutoExpire.Enabled:= False;   Edit_AutoExpire.Enabled:= False;  Edit_AutoExpire.Color:= clBtnFace;
+      Label_ScavengeTTL.Enabled:= False;  Edit_ScavengeTTL.Enabled:= False; Edit_ScavengeTTL.Color:= clBtnFace;
 
       Label_Mode.Enabled:= False;         ComboBox_Mode.Enabled:= False;
       Label_NoDelay.Enabled:= False;
@@ -260,6 +263,10 @@ begin
       CheckBox_AutoExpire.Checked:= Boolean(ClientNode.isAutoExpire);
       Edit_AutoExpire.Text:= ClientNode.AutoExpire;
       CheckBox_AutoExpire.OnClick(FMain);
+
+      CheckBox_ScavengeTTL.Checked:= Boolean(ClientNode.isScavengeTTL);
+      Edit_ScavengeTTL.Text:= ClientNode.ScavengeTTL;
+      CheckBox_ScavengeTTL.OnClick(FMain);
 
 //-------------------------------------------------------------------------------------
       ComboBox_Mode.ItemIndex:= ComboBox_Mode.Items.IndexOf(ClientNode.Mode);

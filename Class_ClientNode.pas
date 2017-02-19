@@ -45,6 +45,7 @@ type
     FisRcvWnd: Integer;             FRcvWnd: string;
     FisDSCP: Integer;               FDSCP: string;
     FisAutoExpire: Integer;         FAutoExpire: string;
+    FisScavengeTTL: Integer;        FScavengeTTL: string;
 
     FisMode: Integer;               FMode: string;
     FisNoDelay: Integer;
@@ -105,6 +106,9 @@ type
 
     procedure SetisAutoExpire(const Value: Integer);
     procedure SetAutoExpire(const Value: string);
+
+    procedure SetisScavengeTTL(const Value: Integer);
+    procedure SetScavengeTTL(const Value: string);
 
     procedure SetisMode(const Value: Integer);
     procedure SetMode(const Value: string);
@@ -185,6 +189,9 @@ type
     property isAutoExpire: Integer read FisAutoExpire write SetisAutoExpire;
     property AutoExpire: string read FAutoExpire write SetAutoExpire;
 
+    property isScavengeTTL: Integer read FisScavengeTTL write SetisScavengeTTL;
+    property ScavengeTTL: string read FScavengeTTL write SetScavengeTTL;
+
     //传输模式
     property isMode: Integer read FisMode write SetisMode;
     property Mode: string read FMode write SetMode;
@@ -258,6 +265,7 @@ begin
   FisRcvWnd:= 0;          FRcvWnd:= '';
   FisDSCP:= 0;            FDSCP:= '';
   FisAutoExpire:= 0;      FAutoExpire:= '';
+  FisScavengeTTL:= 0;     FScavengeTTL:= '';
 
   FisMode:= 0;            FMode:= '';
   FisNoDelay:= 0;
@@ -608,6 +616,26 @@ begin
   FAutoExpire:= Value;
 end;
 
+procedure TClientNode.SetisScavengeTTL(const Value: Integer);
+begin
+  if FCanModifyXML then
+    begin
+      FXMLNode.ChildNodes.FindNode('scavengettl').Attributes['enable']:= Value;
+      FXMLDocument_Para.SaveToFile;
+    end;
+  FisScavengeTTL:= Value;
+end;
+
+procedure TClientNode.SetScavengeTTL(const Value: string);
+begin
+  if FCanModifyXML then
+    begin
+      FXMLNode.ChildNodes.FindNode('scavengettl').NodeValue:= Value;
+      FXMLDocument_Para.SaveToFile;
+    end;
+  FScavengeTTL:= Value;
+end;
+
 procedure TClientNode.SetisMode(const Value: Integer);
 begin
   if FCanModifyXML then
@@ -800,6 +828,10 @@ begin
     FisAutoExpire:= StrToInt(VarToStr(DealNode.Attributes['enable']).Trim);
     FAutoExpire:= VarToStr(DealNode.NodeValue).Trim;
 
+    DealNode:= XMLClientNode.ChildNodes.FindNode('scavengettl');
+    FisScavengeTTL:= StrToInt(VarToStr(DealNode.Attributes['enable']).Trim);
+    FScavengeTTL:= VarToStr(DealNode.NodeValue).Trim;
+
     DealNode:= XMLClientNode.ChildNodes.FindNode('mode');
     FisMode:= StrToInt(VarToStr(DealNode.Attributes['enable']).Trim);
     FMode:= VarToStr(DealNode.NodeValue).Trim;
@@ -897,6 +929,10 @@ begin
     DealNode:= XMLClientNode.AddChild('autoexpire');
     DealNode.Attributes['enable']:= FisAutoExpire;
     DealNode.NodeValue:= FAutoExpire;
+
+    DealNode:= XMLClientNode.AddChild('scavengettl');
+    DealNode.Attributes['enable']:= FisScavengeTTL;
+    DealNode.NodeValue:= FScavengeTTL;
 
     DealNode:= XMLClientNode.AddChild('mode');
     DealNode.Attributes['enable']:= FisMode;
@@ -1005,6 +1041,8 @@ begin
     CMDLine:= CMDLine + ' -dscp ' + FDSCP;
   if (FisAutoExpire <> 0) and (FAutoExpire.Trim <> '') then
     CMDLine:= CMDLine + ' -autoexpire ' + FAutoExpire;
+  if (FisScavengeTTL <> 0) and (FScavengeTTL.Trim <> '') then
+    CMDLine:= CMDLine + ' -scavengettl ' + FScavengeTTL;
 
   //隐藏参数
   if (FisACKNoDelay <> 0) then
@@ -1080,6 +1118,8 @@ begin
       JSONObject.AddPair(TJSONPair.Create('dscp', TJSONNumber.Create(FDSCP.Trim)));
     if (FisAutoExpire <> 0) and (FAutoExpire.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('autoexpire', TJSONNumber.Create(FAutoExpire.Trim)));
+    if (FisScavengeTTL <> 0) and (FScavengeTTL.Trim <> '') then
+      JSONObject.AddPair(TJSONPair.Create('scavengettl', TJSONNumber.Create(FScavengeTTL.Trim)));
 
     if (FisMode <> 0) and (FMode.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('mode', FMode.Trim));
@@ -1194,6 +1234,11 @@ begin
       isAutoExpire:= 1;
       AutoExpire:= IntegerValue.ToString;
     end;
+  if JSONObject.TryGetValue<Integer>('scavengettl', IntegerValue) then
+    begin
+      isScavengeTTL:= 1;
+      ScavengeTTL:= IntegerValue.ToString;
+    end;
 
   if JSONObject.TryGetValue<string>('mode', StringValue) then
     begin
@@ -1291,6 +1336,10 @@ begin
   QRData:= QRData + 'autoexpire=' + ValueStr + ';';
 
   ValueStr:= '';
+  if FisScavengeTTL <> 0 then ValueStr:= FScavengeTTL.Trim;
+  QRData:= QRData + 'scavengettl=' + ValueStr + ';';
+
+  ValueStr:= '';
   if FisMode <> 0 then ValueStr:= FMode.Trim;
   QRData:= QRData + 'mode=' + ValueStr + ';';
 
@@ -1326,7 +1375,6 @@ begin
   QRData:= QRData + 'remark=' + EncodeString(FRemark.Trim) + ';';
 
   Result:= 'kcptun://' + EncodeString(QRData);
-//  Result:= 'kcptun://' + QRData;
 end;
 
 function TClientNode.GetHandle(): THandle;

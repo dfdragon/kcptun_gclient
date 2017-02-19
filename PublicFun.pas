@@ -44,12 +44,12 @@ begin
   end;
 end;
 
-//实现-c参数，Node中加入json节点；加入自动重连节点
+//实现-c参数，Node中加入json节点；加入自动重连节点；加入ScavengeTTL节点
 procedure RepairParaXML(ParaXMLPathName: string);
 var
   isModify: Boolean;
   XMLDocument_BlankPara: TXMLDocument;
-  ParasNode, ProgramParaNode, ClientNode, Node, LocalPortNode, JsonNode, AutoConnNode: IXMLNode;
+  ParasNode, ProgramParaNode, ClientNode, Node, LocalPortNode, JsonNode, AutoConnNode, ScavengeTTLNode: IXMLNode;
   i: Integer;
 begin
   isModify:= False;
@@ -93,6 +93,14 @@ begin
             isModify:= True;
             JsonNode:= Node.AddChild('json');
             JsonNode.Attributes['enable']:= 0;
+          end;
+
+        ScavengeTTLNode:= Node.ChildNodes.FindNode('scavengettl');
+        if ScavengeTTLNode = nil then
+          begin
+            isModify:= True;
+            ScavengeTTLNode:= Node.AddChild('scavengettl');
+            ScavengeTTLNode.Attributes['enable']:= 0;
           end;
       end;
     if isModify then

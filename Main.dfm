@@ -125,7 +125,7 @@ object FMain: TFMain
     TabOrder = 10
     object Label_Remark: TLabel
       Left = 14
-      Top = 313
+      Top = 316
       Width = 36
       Height = 12
       Caption = #22791#27880#65306
@@ -242,7 +242,7 @@ object FMain: TFMain
       Left = 11
       Top = 33
       Width = 458
-      Height = 72
+      Height = 67
       Caption = #22522#30784#21442#25968
       TabOrder = 3
       object Label_LocalPort: TLabel
@@ -256,7 +256,7 @@ object FMain: TFMain
       end
       object Label_KCPServerIP: TLabel
         Left = 41
-        Top = 47
+        Top = 44
         Width = 108
         Height = 12
         Caption = 'KCP'#26381#21153#22120#22320#22336'(r)'#65306
@@ -265,7 +265,7 @@ object FMain: TFMain
       end
       object Label_KCPServerPort: TLabel
         Left = 313
-        Top = 47
+        Top = 44
         Width = 36
         Height = 12
         Hint = #40664#35748#20540#65306'29900'
@@ -287,7 +287,7 @@ object FMain: TFMain
       end
       object Edit_KCPServerIP: TEdit
         Left = 155
-        Top = 44
+        Top = 41
         Width = 121
         Height = 20
         ParentShowHint = False
@@ -297,7 +297,7 @@ object FMain: TFMain
       end
       object Edit_KCPServerPort: TEdit
         Left = 354
-        Top = 44
+        Top = 41
         Width = 81
         Height = 20
         Hint = #40664#35748#20540#65306'29900'
@@ -320,9 +320,9 @@ object FMain: TFMain
     end
     object GroupBox_SelectPara: TGroupBox
       Left = 11
-      Top = 112
+      Top = 105
       Width = 458
-      Height = 190
+      Height = 203
       Caption = #21487#36873#21442#25968'('#21152#26143#21442#25968#38656#35201#19982#26381#21153#31471#20445#25345#19968#33268')'
       TabOrder = 4
       object Label_Key: TLabel
@@ -343,7 +343,7 @@ object FMain: TFMain
       end
       object Label_Crypt: TLabel
         Left = 31
-        Top = 54
+        Top = 52
         Width = 132
         Height = 12
         Hint = #40664#35748#20540#65306'aes'
@@ -359,7 +359,7 @@ object FMain: TFMain
       end
       object Label_Conn: TLabel
         Left = 79
-        Top = 110
+        Top = 103
         Width = 84
         Height = 12
         Hint = #40664#35748#20540#65306'1'
@@ -369,7 +369,7 @@ object FMain: TFMain
       end
       object Label_MTU: TLabel
         Left = 321
-        Top = 109
+        Top = 103
         Width = 84
         Height = 12
         Hint = #40664#35748#20540#65306'1350'
@@ -379,7 +379,7 @@ object FMain: TFMain
       end
       object Label_SndWnd: TLabel
         Left = 55
-        Top = 138
+        Top = 129
         Width = 108
         Height = 12
         Hint = #40664#35748#20540#65306'128'
@@ -389,7 +389,7 @@ object FMain: TFMain
       end
       object Label_RcvWnd: TLabel
         Left = 297
-        Top = 137
+        Top = 129
         Width = 108
         Height = 12
         Hint = #40664#35748#20540#65306'512'
@@ -399,7 +399,7 @@ object FMain: TFMain
       end
       object Label_DSCP: TLabel
         Left = 43
-        Top = 166
+        Top = 155
         Width = 120
         Height = 12
         Hint = #40664#35748#20540#65306'0'
@@ -409,7 +409,7 @@ object FMain: TFMain
       end
       object Label_DataShard: TLabel
         Left = 31
-        Top = 82
+        Top = 78
         Width = 132
         Height = 12
         Hint = #40664#35748#20540#65306'10'
@@ -425,7 +425,7 @@ object FMain: TFMain
       end
       object Label_ParityShard: TLabel
         Left = 261
-        Top = 81
+        Top = 78
         Width = 144
         Height = 12
         Hint = #40664#35748#20540#65306'3'
@@ -441,7 +441,7 @@ object FMain: TFMain
       end
       object Label_NoComp: TLabel
         Left = 332
-        Top = 54
+        Top = 52
         Width = 114
         Height = 12
         Hint = #40664#35748#20540#65306#19981#24320#21551
@@ -457,11 +457,21 @@ object FMain: TFMain
       end
       object Label_AutoExpire: TLabel
         Left = 273
-        Top = 166
+        Top = 155
         Width = 132
         Height = 12
         Hint = #40664#35748#20540#65306'0'
         Caption = #36807#26399#26102#38388'(autoexpire)'#65306
+        ParentShowHint = False
+        ShowHint = True
+      end
+      object Label_ScavengeTTL: TLabel
+        Left = 40
+        Top = 181
+        Width = 186
+        Height = 12
+        Hint = #40664#35748#20540#65306'600'
+        Caption = #22833#25928#20250#35805#20445#30041#26102#38388'(scavengettl)'#65306
         ParentShowHint = False
         ShowHint = True
       end
@@ -479,7 +489,7 @@ object FMain: TFMain
       object Edit_Key: TEdit
         Left = 164
         Top = 22
-        Width = 281
+        Width = 283
         Height = 20
         Hint = #40664#35748#20540#65306'it'#39's a secrect'
         ParentShowHint = False
@@ -489,7 +499,7 @@ object FMain: TFMain
       end
       object CheckBox_Crypt: TCheckBox
         Left = 10
-        Top = 52
+        Top = 50
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'aes'
@@ -500,7 +510,7 @@ object FMain: TFMain
       end
       object ComboBox_Crypt: TComboBox
         Left = 164
-        Top = 50
+        Top = 48
         Width = 113
         Height = 20
         Hint = #40664#35748#20540#65306'aes'
@@ -526,7 +536,7 @@ object FMain: TFMain
       end
       object CheckBox_Conn: TCheckBox
         Left = 10
-        Top = 108
+        Top = 102
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'1'
@@ -537,7 +547,7 @@ object FMain: TFMain
       end
       object Edit_Conn: TEdit
         Left = 164
-        Top = 106
+        Top = 99
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'1'
@@ -549,7 +559,7 @@ object FMain: TFMain
       end
       object CheckBox_MTU: TCheckBox
         Left = 244
-        Top = 108
+        Top = 102
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'1350'
@@ -560,7 +570,7 @@ object FMain: TFMain
       end
       object Edit_MTU: TEdit
         Left = 406
-        Top = 105
+        Top = 99
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'1350'
@@ -572,7 +582,7 @@ object FMain: TFMain
       end
       object CheckBox_SndWnd: TCheckBox
         Left = 10
-        Top = 136
+        Top = 128
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'128'
@@ -583,7 +593,7 @@ object FMain: TFMain
       end
       object Edit_SndWnd: TEdit
         Left = 164
-        Top = 134
+        Top = 125
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'128'
@@ -595,7 +605,7 @@ object FMain: TFMain
       end
       object CheckBox_RcvWnd: TCheckBox
         Left = 244
-        Top = 136
+        Top = 128
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'512'
@@ -606,7 +616,7 @@ object FMain: TFMain
       end
       object Edit_RcvWnd: TEdit
         Left = 406
-        Top = 133
+        Top = 125
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'512'
@@ -618,7 +628,7 @@ object FMain: TFMain
       end
       object CheckBox_NoComp: TCheckBox
         Left = 315
-        Top = 52
+        Top = 50
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306#19981#24320#21551
@@ -635,7 +645,7 @@ object FMain: TFMain
       end
       object CheckBox_DSCP: TCheckBox
         Left = 10
-        Top = 164
+        Top = 154
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'0'
@@ -646,7 +656,7 @@ object FMain: TFMain
       end
       object Edit_DSCP: TEdit
         Left = 164
-        Top = 162
+        Top = 151
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'0'
@@ -658,7 +668,7 @@ object FMain: TFMain
       end
       object CheckBox_DataShard: TCheckBox
         Left = 10
-        Top = 80
+        Top = 76
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'10'
@@ -669,7 +679,7 @@ object FMain: TFMain
       end
       object Edit_DataShard: TEdit
         Left = 164
-        Top = 78
+        Top = 74
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'10'
@@ -681,7 +691,7 @@ object FMain: TFMain
       end
       object CheckBox_ParityShard: TCheckBox
         Left = 244
-        Top = 80
+        Top = 76
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'3'
@@ -692,7 +702,7 @@ object FMain: TFMain
       end
       object Edit_ParityShard: TEdit
         Left = 406
-        Top = 77
+        Top = 74
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'3'
@@ -704,7 +714,7 @@ object FMain: TFMain
       end
       object CheckBox_AutoExpire: TCheckBox
         Left = 244
-        Top = 164
+        Top = 154
         Width = 17
         Height = 17
         Hint = #40664#35748#20540#65306'0'
@@ -715,7 +725,7 @@ object FMain: TFMain
       end
       object Edit_AutoExpire: TEdit
         Left = 406
-        Top = 162
+        Top = 151
         Width = 41
         Height = 20
         Hint = #40664#35748#20540#65306'0'
@@ -724,6 +734,30 @@ object FMain: TFMain
         TabOrder = 20
         OnChange = Edit_AutoExpireChange
         OnKeyPress = Edit_LocalPortKeyPress
+      end
+      object CheckBox_ScavengeTTL: TCheckBox
+        Left = 10
+        Top = 180
+        Width = 16
+        Height = 17
+        Hint = #40664#35748#20540#65306'600'
+        Caption = 'CheckBox_ScavengeTTL'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 21
+        OnClick = CheckBox_ScavengeTTLClick
+      end
+      object Edit_ScavengeTTL: TEdit
+        Left = 229
+        Top = 178
+        Width = 41
+        Height = 18
+        Hint = #40664#35748#20540#65306'600'
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 22
+        OnChange = Edit_ScavengeTTLChange
+        OnKeyPress = Edit_ScavengeTTLKeyPress
       end
     end
     object GroupBox_Mode: TGroupBox
@@ -899,7 +933,7 @@ object FMain: TFMain
     end
     object Edit_Remark: TEdit
       Left = 49
-      Top = 310
+      Top = 313
       Width = 420
       Height = 20
       TabOrder = 7
@@ -1208,7 +1242,7 @@ object FMain: TFMain
     Left = 209
     Top = 174
     Bitmap = {
-      494C010104001800400110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800440110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
