@@ -111,10 +111,12 @@ object FMain: TFMain
       end
       item
         Alignment = taCenter
-        Text = ' KcpTun '#23458#25143#31471#31243#24207#24314#35758#20351#29992' 20170112 '#25110#26356#39640#29256#26412
+        Text = 'KCPTun '#23458#25143#31471#31243#24207#35831#20351#29992' 20170218 '#25110#26356#39640#29256#26412
         Width = 50
       end>
     OnMouseDown = StatusBar_StatusMouseDown
+    OnMouseLeave = StatusBar_StatusMouseLeave
+    OnMouseMove = StatusBar_StatusMouseMove
   end
   object Panel_ClientNodeInfo: TPanel
     Left = 278
@@ -751,7 +753,7 @@ object FMain: TFMain
         Left = 229
         Top = 178
         Width = 41
-        Height = 18
+        Height = 20
         Hint = #40664#35748#20540#65306'600'
         ParentShowHint = False
         ShowHint = True
@@ -1242,7 +1244,7 @@ object FMain: TFMain
     Left = 209
     Top = 174
     Bitmap = {
-      494C010104001800440110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101040018004C0110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

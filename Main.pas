@@ -210,6 +210,9 @@ type
     procedure Edit_ScavengeTTLKeyPress(Sender: TObject; var Key: Char);
     procedure CheckBox_ScavengeTTLClick(Sender: TObject);
     procedure Edit_ScavengeTTLChange(Sender: TObject);
+    procedure StatusBar_StatusMouseLeave(Sender: TObject);
+    procedure StatusBar_StatusMouseMove(Sender: TObject; Shift: TShiftState; X,
+      Y: Integer);
   private
     { Private declarations }
     function CreateQRCodeBitmap(QRData: string): TMemoryStream;
@@ -1563,6 +1566,20 @@ begin
     2:  ShellExecute(Application.Handle, 'open', PWideChar(IssuesURL), nil, nil, SW_SHOWNORMAL);
     3:  ShellExecute(Application.Handle, 'open', PWideChar(KcpTunClientDownloadURL), nil, nil, SW_SHOWNORMAL);
   end;
+end;
+
+procedure TFMain.StatusBar_StatusMouseLeave(Sender: TObject);
+begin
+  StatusBar_Status.Cursor:= crDefault;
+end;
+
+procedure TFMain.StatusBar_StatusMouseMove(Sender: TObject; Shift: TShiftState;
+  X, Y: Integer);
+begin
+  if X > StatusBar_Status.Panels[0].Width then
+    StatusBar_Status.Cursor:= crHandpoint
+  else
+    StatusBar_Status.Cursor:= crDefault;
 end;
 
 procedure TFMain.Memo_CMDLineDblClick(Sender: TObject);
