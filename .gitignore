@@ -58,6 +58,7 @@
 *.dsk
 
 # Delphi history and backups
+res/
 __history/
 __recovery/
 Win32
