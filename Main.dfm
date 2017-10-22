@@ -478,11 +478,14 @@ object FMain: TFMain
         ShowHint = True
       end
       object Label_Quiet: TLabel
-        Left = 340
+        Left = 338
         Top = 181
-        Width = 72
+        Width = 114
         Height = 12
-        Caption = #21551#29992#38745#40664#27169#24335
+        Hint = #40664#35748#20540#65306#19981#21551#29992
+        Caption = #21551#29992#38745#40664#27169#24335'(quiet)'
+        ParentShowHint = False
+        ShowHint = True
       end
       object CheckBox_Key: TCheckBox
         Left = 10
@@ -774,6 +777,9 @@ object FMain: TFMain
         Top = 180
         Width = 17
         Height = 17
+        Hint = #40664#35748#20540#65306#19981#21551#29992
+        ParentShowHint = False
+        ShowHint = True
         TabOrder = 23
         OnClick = CheckBox_QuietClick
       end
@@ -1260,7 +1266,7 @@ object FMain: TFMain
     Left = 209
     Top = 174
     Bitmap = {
-      494C010104001800540110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800580110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
