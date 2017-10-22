@@ -46,6 +46,7 @@ type
     FisDSCP: Integer;               FDSCP: string;
     FisAutoExpire: Integer;         FAutoExpire: string;
     FisScavengeTTL: Integer;        FScavengeTTL: string;
+    FisQuiet: Integer;
 
     FisMode: Integer;               FMode: string;
     FisNoDelay: Integer;
@@ -109,6 +110,8 @@ type
 
     procedure SetisScavengeTTL(const Value: Integer);
     procedure SetScavengeTTL(const Value: string);
+
+    procedure SetisQuiet(const Value: Integer);
 
     procedure SetisMode(const Value: Integer);
     procedure SetMode(const Value: string);
@@ -192,6 +195,8 @@ type
     property isScavengeTTL: Integer read FisScavengeTTL write SetisScavengeTTL;
     property ScavengeTTL: string read FScavengeTTL write SetScavengeTTL;
 
+    property isQuiet: Integer read FisQuiet write SetisQuiet;
+
     //传输模式
     property isMode: Integer read FisMode write SetisMode;
     property Mode: string read FMode write SetMode;
@@ -266,6 +271,7 @@ begin
   FisDSCP:= 0;            FDSCP:= '';
   FisAutoExpire:= 0;      FAutoExpire:= '';
   FisScavengeTTL:= 0;     FScavengeTTL:= '';
+  FisQuiet:= 0;
 
   FisMode:= 0;            FMode:= '';
   FisNoDelay:= 0;
@@ -636,6 +642,16 @@ begin
   FScavengeTTL:= Value;
 end;
 
+procedure TClientNode.SetisQuiet(const Value: Integer);
+begin
+  if FCanModifyXML then
+    begin
+      FXMLNode.ChildNodes.FindNode('quiet').Attributes['enable']:= Value;
+      FXMLDocument_Para.SaveToFile;
+    end;
+  FisQuiet:= Value;
+end;
+
 procedure TClientNode.SetisMode(const Value: Integer);
 begin
   if FCanModifyXML then
@@ -832,6 +848,9 @@ begin
     FisScavengeTTL:= StrToInt(VarToStr(DealNode.Attributes['enable']).Trim);
     FScavengeTTL:= VarToStr(DealNode.NodeValue).Trim;
 
+    DealNode:= XMLClientNode.ChildNodes.FindNode('quiet');
+    FisQuiet:= StrToInt(VarToStr(DealNode.Attributes['enable']).Trim);
+
     DealNode:= XMLClientNode.ChildNodes.FindNode('mode');
     FisMode:= StrToInt(VarToStr(DealNode.Attributes['enable']).Trim);
     FMode:= VarToStr(DealNode.NodeValue).Trim;
@@ -933,6 +952,9 @@ begin
     DealNode:= XMLClientNode.AddChild('scavengettl');
     DealNode.Attributes['enable']:= FisScavengeTTL;
     DealNode.NodeValue:= FScavengeTTL;
+
+    DealNode:= XMLClientNode.AddChild('quiet');
+    DealNode.Attributes['enable']:= FisQuiet;
 
     DealNode:= XMLClientNode.AddChild('mode');
     DealNode.Attributes['enable']:= FisMode;
@@ -1043,6 +1065,8 @@ begin
     CMDLine:= CMDLine + ' -autoexpire ' + FAutoExpire;
   if (FisScavengeTTL <> 0) and (FScavengeTTL.Trim <> '') then
     CMDLine:= CMDLine + ' -scavengettl ' + FScavengeTTL;
+  if (FisQuiet <> 0)  then
+    CMDLine:= CMDLine + ' -quiet';
 
   //隐藏参数
   if (FisACKNoDelay <> 0) then
@@ -1120,6 +1144,11 @@ begin
       JSONObject.AddPair(TJSONPair.Create('autoexpire', TJSONNumber.Create(FAutoExpire.Trim)));
     if (FisScavengeTTL <> 0) and (FScavengeTTL.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('scavengettl', TJSONNumber.Create(FScavengeTTL.Trim)));
+
+    if (FisQuiet <> 0) then
+      JSONObject.AddPair(TJSONPair.Create('quiet', TJSONTrue.Create))
+    else
+      JSONObject.AddPair(TJSONPair.Create('quiet', TJSONFalse.Create));
 
     if (FisMode <> 0) and (FMode.Trim <> '') then
       JSONObject.AddPair(TJSONPair.Create('mode', FMode.Trim));
@@ -1239,6 +1268,10 @@ begin
       isScavengeTTL:= 1;
       ScavengeTTL:= IntegerValue.ToString;
     end;
+  if JSONObject.TryGetValue<Boolean>('quiet', BooleanValue) then
+    begin
+      isQuiet:= Integer(BooleanValue);
+    end;
 
   if JSONObject.TryGetValue<string>('mode', StringValue) then
     begin
@@ -1338,6 +1371,8 @@ begin
   ValueStr:= '';
   if FisScavengeTTL <> 0 then ValueStr:= FScavengeTTL.Trim;
   QRData:= QRData + 'scavengettl=' + ValueStr + ';';
+
+  QRData:= QRData + 'quiet=' + LowerCase(BoolToStr(Boolean(FisQuiet), True)) + ';';
 
   ValueStr:= '';
   if FisMode <> 0 then ValueStr:= FMode.Trim;

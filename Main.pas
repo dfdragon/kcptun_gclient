@@ -127,6 +127,8 @@ type
     CheckBox_ScavengeTTL: TCheckBox;
     Label_ScavengeTTL: TLabel;
     Edit_ScavengeTTL: TEdit;
+    CheckBox_Quiet: TCheckBox;
+    Label_Quiet: TLabel;
     procedure Btn_AddNodeClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Btn_FindClientEXEClick(Sender: TObject);
@@ -213,6 +215,7 @@ type
     procedure StatusBar_StatusMouseLeave(Sender: TObject);
     procedure StatusBar_StatusMouseMove(Sender: TObject; Shift: TShiftState; X,
       Y: Integer);
+    procedure CheckBox_QuietClick(Sender: TObject);
   private
     { Private declarations }
     function CreateQRCodeBitmap(QRData: string): TMemoryStream;
@@ -893,6 +896,17 @@ begin
   if ListView_Node.Selected = nil then
     Exit;
   TClientNode(ListView_Node.Selected.Data).isParityShard:= Integer(CheckBox_ParityShard.Checked);
+
+  if PublicVar.CanModifyXML then
+    LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));
+end;
+
+procedure TFMain.CheckBox_QuietClick(Sender: TObject);
+begin
+  Label_Quiet.Enabled:= CheckBox_Quiet.Checked;
+  if ListView_Node.Selected = nil then
+    Exit;
+  TClientNode(ListView_Node.Selected.Data).isQuiet:= Integer(CheckBox_Quiet.Checked);
 
   if PublicVar.CanModifyXML then
     LoadQRCodeImage(TClientNode(ListView_Node.Selected.Data));

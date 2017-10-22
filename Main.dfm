@@ -111,7 +111,7 @@ object FMain: TFMain
       end
       item
         Alignment = taCenter
-        Text = 'KCPTun '#23458#25143#31471#31243#24207#35831#20351#29992' 20170218 '#25110#26356#39640#29256#26412
+        Text = 'KCPTun '#23458#25143#31471#31243#24207#35831#20351#29992' 20171021 '#25110#26356#39640#29256#26412
         Width = 50
       end>
     OnMouseDown = StatusBar_StatusMouseDown
@@ -477,6 +477,13 @@ object FMain: TFMain
         ParentShowHint = False
         ShowHint = True
       end
+      object Label_Quiet: TLabel
+        Left = 340
+        Top = 181
+        Width = 72
+        Height = 12
+        Caption = #21551#29992#38745#40664#27169#24335
+      end
       object CheckBox_Key: TCheckBox
         Left = 10
         Top = 24
@@ -534,6 +541,7 @@ object FMain: TFMain
           'tea'
           'xtea'
           'xor'
+          'sm4'
           'none')
       end
       object CheckBox_Conn: TCheckBox
@@ -760,6 +768,14 @@ object FMain: TFMain
         TabOrder = 22
         OnChange = Edit_ScavengeTTLChange
         OnKeyPress = Edit_ScavengeTTLKeyPress
+      end
+      object CheckBox_Quiet: TCheckBox
+        Left = 315
+        Top = 180
+        Width = 17
+        Height = 17
+        TabOrder = 23
+        OnClick = CheckBox_QuietClick
       end
     end
     object GroupBox_Mode: TGroupBox
@@ -1244,7 +1260,7 @@ object FMain: TFMain
     Left = 209
     Top = 174
     Bitmap = {
-      494C010104001800500110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104001800540110001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

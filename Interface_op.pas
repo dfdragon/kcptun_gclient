@@ -75,6 +75,7 @@ begin
       CheckBox_DSCP.Enabled:= State;
       CheckBox_AutoExpire.Enabled:= State;
       CheckBox_ScavengeTTL.Enabled:= State;
+      CheckBox_Quiet.Enabled:= State;
 
       CheckBox_Mode.Enabled:= State;
       CheckBox_NoDelay.Enabled:= State;
@@ -128,6 +129,7 @@ begin
       CheckBox_DSCP.Enabled:= State;          CheckBox_DSCPClick(FMain);
       CheckBox_AutoExpire.Enabled:= State;    CheckBox_AutoExpireClick(FMain);
       CheckBox_ScavengeTTL.Enabled:= State;   CheckBox_ScavengeTTLClick(FMain);
+      CheckBox_Quiet.Enabled:= State;         CheckBox_QuietClick(FMain);
     end;
 end;
 
@@ -170,6 +172,7 @@ begin
       Label_DSCP.Enabled:= False;         Edit_DSCP.Enabled:= False;        Edit_DSCP.Color:= clBtnFace;
       Label_AutoExpire.Enabled:= False;   Edit_AutoExpire.Enabled:= False;  Edit_AutoExpire.Color:= clBtnFace;
       Label_ScavengeTTL.Enabled:= False;  Edit_ScavengeTTL.Enabled:= False; Edit_ScavengeTTL.Color:= clBtnFace;
+      Label_Quiet.Enabled:= False;
 
       Label_Mode.Enabled:= False;         ComboBox_Mode.Enabled:= False;
       Label_NoDelay.Enabled:= False;
@@ -267,6 +270,9 @@ begin
       CheckBox_ScavengeTTL.Checked:= Boolean(ClientNode.isScavengeTTL);
       Edit_ScavengeTTL.Text:= ClientNode.ScavengeTTL;
       CheckBox_ScavengeTTL.OnClick(FMain);
+
+      CheckBox_Quiet.Checked:= Boolean(ClientNode.isQuiet);
+      CheckBox_Quiet.OnClick(FMain);
 
 //-------------------------------------------------------------------------------------
       ComboBox_Mode.ItemIndex:= ComboBox_Mode.Items.IndexOf(ClientNode.Mode);
